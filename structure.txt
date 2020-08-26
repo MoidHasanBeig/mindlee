@@ -1,0 +1,73 @@
+1) Select mindmap or create new mindmap
+2) first level of mindmap : Main ball, Add new balls icon, Sub balls
+3) Click on Add new balls icon: 2 tabs -> a)Create notes area b)select color
+4) Click on sub ball: open sub mindmap
+5) Click on main ball: edit text area and select color area.
+
+Data architecture: An example
+
+Web Development(a0) ->
+  Frontend(b0) ->
+    HTML(c0)
+    CSS(c1)
+    JavaScript(c2) ->
+      React(e0)
+      Angular(e1)
+      Vanilla(e2)
+      Vue(e3)
+  Backend(b1) ->
+    NodeJS(d0)
+    Database(d1) ->
+      SQL(f0)
+      NoSQL(f1) ->
+        MongoDB(g0)
+
+{
+a0:{
+  parent: home
+  sub:[b0,b1]
+},
+b0:{
+  parent: a0
+  sub:[c0,c1,c2]
+},
+b1:{
+  sub:[d0,d1]
+},
+c0:{
+  ...
+},
+c1:{
+  ...
+},
+c2:{
+  sub:[e0,e1,e2,e3]
+},
+d0:{
+  ...
+},
+d1:{
+  sub:[f0,f1]
+},
+e0:{
+  ...
+},
+e1:{
+  ...
+},
+e2:{
+  ...
+},
+e3:{
+  ...
+},
+f0:{
+  ...
+},
+f1:{
+  sub:[g0]
+},
+g0:{
+  ...
+}
+}
