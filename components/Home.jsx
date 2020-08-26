@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { TouchableHighlight, StyleSheet, View, ScrollView } from 'react-native';
 import Ftext from './Ftext';
 import Noteball from './Noteball';
 
@@ -14,15 +14,17 @@ function SelectMap() {
   );
 }
 
-function CreateNewMap() {
+function CreateNewMap(props) {
   return (
-    <View style={styles.createNewMap}>
-      <Ftext size={50}>+</Ftext>
-    </View>
+    <TouchableHighlight style={styles.touchWrapperCreateNewMap} onPress={() => props.setShowCreateNote(true)}>
+      <View style={styles.createNewMap}>
+        <Ftext size={50}>+</Ftext>
+      </View>
+    </TouchableHighlight>
   );
 }
 
-export default function Home() {
+export default function Home(props) {
   return (
     <View style={styles.home}>
       <View style={styles.header}>
@@ -41,7 +43,7 @@ export default function Home() {
         <SelectMap />
         <SelectMap />
       </ScrollView>
-      <CreateNewMap />
+      <CreateNewMap setShowCreateNote={props.setShowCreateNote} />
     </View>
   );
 }
@@ -72,15 +74,18 @@ const styles = StyleSheet.create({
     marginLeft:40
   },
   createNewMap: {
-    position:'absolute',
-    bottom:25,
-    right:25,
     height:70,
     width:70,
     backgroundColor:'#5CAB7D',
-    borderRadius:50,
     alignItems:'center',
     justifyContent:'center',
+  },
+  touchWrapperCreateNewMap: {
+    position:'absolute',
+    bottom:25,
+    right:25,
+    borderRadius:50,
+    overflow:'hidden',
     elevation:5
   }
 });
