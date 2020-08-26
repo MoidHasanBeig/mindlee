@@ -1,16 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import Ftext from './Ftext';
+import Noteball from './Noteball';
 
 function SelectMap() {
   return (
     <View style={styles.selectMap}>
-      <View style={styles.mapName}>
-        <Ftext size={20}>Mindlee</Ftext>
-      </View>
+      <Noteball text='Mindlee' />
       <View style={styles.mapDetails}>
-        <Text>Description: Lorem Ipsum Dolor Amet &nbsp; Date created: 22-07-2020</Text>
+        <Ftext size={15} color='#1C1D1D'>Description: Lorem Ipsum Dolor Amet &nbsp; Date created: 22-07-2020</Ftext>
       </View>
+    </View>
+  );
+}
+
+function CreateNewMap() {
+  return (
+    <View style={styles.createNewMap}>
+      <Ftext size={50}>+</Ftext>
     </View>
   );
 }
@@ -34,6 +41,7 @@ export default function Home() {
         <SelectMap />
         <SelectMap />
       </ScrollView>
+      <CreateNewMap />
     </View>
   );
 }
@@ -53,22 +61,26 @@ const styles = StyleSheet.create({
   },
   selectMap: {
     flexDirection:'row',
-    justifyContent:'space-around',
-    marginLeft:10,
+    justifyContent:'flex-start',
+    marginLeft:40,
     marginBottom:40
-  },
-  mapName: {
-    height:150,
-    width:150,
-    backgroundColor:'#5CAB7D',
-    borderRadius:75,
-    justifyContent:'center',
-    alignItems:'center',
-    overflow:'hidden'
   },
   mapDetails: {
     justifyContent:'center',
     alignItems:'flex-start',
-    width:200
+    width:200,
+    marginLeft:40
+  },
+  createNewMap: {
+    position:'absolute',
+    bottom:25,
+    right:25,
+    height:70,
+    width:70,
+    backgroundColor:'#5CAB7D',
+    borderRadius:50,
+    alignItems:'center',
+    justifyContent:'center',
+    elevation:5
   }
 });
