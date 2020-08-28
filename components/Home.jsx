@@ -2,48 +2,40 @@ import React from 'react';
 import { TouchableHighlight, StyleSheet, View, ScrollView } from 'react-native';
 import Ftext from './Ftext';
 import Noteball from './Noteball';
-
-function SelectMap() {
-  return (
-    <View style={styles.selectMap}>
-      <Noteball text='Mindlee' />
-      <View style={styles.mapDetails}>
-        <Ftext size={15} color='#1C1D1D'>Description: Lorem Ipsum Dolor Amet &nbsp; Date created: 22-07-2020</Ftext>
-      </View>
-    </View>
-  );
-}
-
-function CreateNewMap(props) {
-  return (
-    <TouchableHighlight style={styles.touchWrapperCreateNewMap} onPress={() => props.setShowCreateNote(true)}>
-      <View style={styles.createNewMap}>
-        <Ftext size={50}>+</Ftext>
-      </View>
-    </TouchableHighlight>
-  );
-}
+import ButtonRound from './ButtonRound';
 
 export default function Home(props) {
+
+  function SelectMap(props) {
+    return (
+      <View style={styles.selectMap}>
+        <Noteball color={props.color} size={30} text={props.title} />
+        <View style={styles.mapDetails}>
+          <Ftext size={15} color='#1C1D1D'>Description: Lorem Ipsum Dolor Amet &nbsp; Date created: 22-07-2020</Ftext>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.home}>
       <View style={styles.header}>
         <Ftext size={30}>MindLee</Ftext>
       </View>
-      <ScrollView style={{paddingTop:30}}>
-        <SelectMap />
-        <SelectMap />
-        <SelectMap />
-        <SelectMap />
-        <SelectMap />
-        <SelectMap />
-        <SelectMap />
-        <SelectMap />
-        <SelectMap />
-        <SelectMap />
-        <SelectMap />
+      <ScrollView style={{paddingTop:30,paddingBottom:50}}>
+        {
+          Object.values(props.allMaps).map((item,index) => {
+            return (
+              <SelectMap
+                title={item.title}
+                color={item.color}
+                key={index}
+              />
+            )
+          })
+        }
       </ScrollView>
-      <CreateNewMap setShowCreateNote={props.setShowCreateNote} />
+      <ButtonRound text='＋' handlePress={props.setShowCreateNote} />
     </View>
   );
 }
@@ -63,29 +55,13 @@ const styles = StyleSheet.create({
   },
   selectMap: {
     flexDirection:'row',
-    justifyContent:'flex-start',
-    marginLeft:40,
-    marginBottom:40
+    justifyContent:'space-around',
+    marginBottom:40,
+    width:'100%'
   },
   mapDetails: {
     justifyContent:'center',
     alignItems:'flex-start',
-    width:200,
-    marginLeft:40
-  },
-  createNewMap: {
-    height:70,
-    width:70,
-    backgroundColor:'#5CAB7D',
-    alignItems:'center',
-    justifyContent:'center',
-  },
-  touchWrapperCreateNewMap: {
-    position:'absolute',
-    bottom:25,
-    right:25,
-    borderRadius:50,
-    overflow:'hidden',
-    elevation:5
+    maxWidth:'50%'
   }
 });

@@ -1,17 +1,21 @@
 import React from 'react';
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import Ftext from './Ftext';
 
 export default function Noteball(props) {
+  const width = useWindowDimensions().width;
+  const ballSize = props.size * width / 100;
+
   return (
     <View style={{
-      height:props.size || 120,
-      width:props.size || 120,
+      height:ballSize || 120,
+      width:ballSize || 120,
       backgroundColor: props.color || '#5CAB7D',
-      borderRadius:props.size || 75,
+      borderRadius:ballSize || 75,
       justifyContent:'center',
       alignItems:'center',
-      overflow:'hidden'
+      overflow:'hidden',
+      elevation:3
     }}>
       <Ftext size={20}>{props.text}</Ftext>
     </View>
