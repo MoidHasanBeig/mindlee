@@ -13,7 +13,7 @@ export default function Home(props) {
       <View style={styles.selectMap}>
         <Noteball color={props.color} size={30} text={props.title} />
         <View style={styles.mapDetails}>
-          <Ftext size={15} color='#1C1D1D'>Description: Lorem Ipsum Dolor Amet &nbsp; Date created: 22-07-2020</Ftext>
+          <Ftext size={15} color='#999'>Description: Lorem Ipsum Dolor Amet &nbsp; Date created: 22-07-2020</Ftext>
         </View>
       </View>
     );
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   mapDetails: {
     justifyContent:'center',
     alignItems:'flex-start',
-    maxWidth:'50%'
+    width:'50%'
   },
   image: {
     flex: 1,

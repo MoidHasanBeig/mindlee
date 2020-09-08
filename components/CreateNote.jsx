@@ -11,7 +11,8 @@ export default function CreateNote(props) {
   const [noteValue,onChangeNote] = useState('');
   const [descValue,onChangeDesc] = useState('');
 
-  const swipeAnim = useRef(new Animated.Value(0)).current;
+  const swipeAnim = useRef(new Animated.Value(500)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const data = props.operatingValue;
 
@@ -52,6 +53,25 @@ export default function CreateNote(props) {
   }
 
   useEffect(() => {
+    Animated.timing(
+      fadeAnim,
+      {
+        toValue:1,
+        duration:300,
+        useNativeDriver:false
+      }
+    ).start();
+    Animated.timing(
+      swipeAnim,
+      {
+        toValue:0,
+        duration:200,
+        useNativeDriver:false
+      }
+    ).start();
+  });
+
+  useEffect(() => {
     function backAction() {
       props.setShowCreateNote(false);
       return true;
@@ -63,7 +83,11 @@ export default function CreateNote(props) {
   });
 
   return (
-    <View style={styles.createNote}>
+    <Animated.View style={{
+      ...styles.createNote,
+      opacity:fadeAnim,
+      top:swipeAnim
+    }}>
       <View style={styles.tabsHeader}>
         <TouchableHighlight style={styles.touchWrapperTabs} onPress={() => setActiveBtn('note')}>
           <View style={{...styles.tab,backgroundColor: activeBtn === 'note' ? '#5CAB7D' : '#DDD'}}>
@@ -89,7 +113,7 @@ export default function CreateNote(props) {
         />
       }
       <ButtonRound text='✓' handlePress={() => saveNote()}/>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -98,7 +122,6 @@ const styles = StyleSheet.create({
     height:'100%',
     width:'100%',
     position:'absolute',
-    top:0,
     left:0,
     zIndex:2,
     elevation:5,
