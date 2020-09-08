@@ -1,8 +1,10 @@
 import React from 'react';
-import { TouchableHighlight, StyleSheet, View, ScrollView } from 'react-native';
+import { TouchableHighlight, StyleSheet, View, ScrollView, ImageBackground } from 'react-native';
 import Ftext from './Ftext';
 import Noteball from './Noteball';
 import ButtonRound from './ButtonRound';
+
+const image = require('./assets/bg.png');
 
 export default function Home(props) {
 
@@ -19,23 +21,25 @@ export default function Home(props) {
 
   return (
     <View style={styles.home}>
-      <View style={styles.header}>
-        <Ftext size={30}>MindLee</Ftext>
-      </View>
-      <ScrollView style={{paddingTop:30,paddingBottom:50}}>
-        {
-          Object.values(props.allMaps).map((item,index) => {
-            return (
-              <SelectMap
-                title={item.title}
-                color={item.color}
-                key={index}
-              />
-            )
-          })
-        }
-      </ScrollView>
-      <ButtonRound text='＋' handlePress={props.setShowCreateNote} />
+      <ImageBackground source={image} style={styles.image}>
+        <View style={styles.header}>
+          <Ftext size={30}>MindLee</Ftext>
+        </View>
+        <ScrollView style={{paddingTop:30,paddingBottom:50}}>
+          {
+            Object.values(props.allMaps).map((item,index) => {
+              return (
+                <SelectMap
+                  title={item.title}
+                  color={item.color}
+                  key={index}
+                />
+              )
+            })
+          }
+        </ScrollView>
+        <ButtonRound text='＋' handlePress={props.setShowCreateNote} />
+      </ImageBackground>
     </View>
   );
 }
@@ -63,5 +67,11 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'flex-start',
     maxWidth:'50%'
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    width:'100%'
   }
 });

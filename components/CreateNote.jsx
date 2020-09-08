@@ -1,5 +1,5 @@
-import React,{ useEffect,useState } from 'react';
-import { TextInput, TouchableHighlight, StyleSheet, View, BackHandler } from 'react-native';
+import React,{ useEffect, useState, useRef } from 'react';
+import { Animated, TextInput, TouchableHighlight, StyleSheet, View, BackHandler } from 'react-native';
 import Ftext from './Ftext';
 import ButtonRound from './ButtonRound';
 import NoteEditArea from './NoteEditArea';
@@ -10,6 +10,8 @@ export default function CreateNote(props) {
   const [currentColor,setCurrentColor] = useState('#5CAB7D');
   const [noteValue,onChangeNote] = useState('');
   const [descValue,onChangeDesc] = useState('');
+
+  const swipeAnim = useRef(new Animated.Value(0)).current;
 
   const data = props.operatingValue;
 
@@ -99,8 +101,8 @@ const styles = StyleSheet.create({
     top:0,
     left:0,
     zIndex:2,
-    backgroundColor:'#FFF',
-    elevation:5
+    elevation:5,
+    backgroundColor:'#FFF'
   },
   tabsHeader: {
     flexDirection:'row',
