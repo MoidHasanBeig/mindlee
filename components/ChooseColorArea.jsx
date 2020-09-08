@@ -1,11 +1,43 @@
 import React from 'react';
-import { useWindowDimensions, TouchableHighlight, View, TextInput, StyleSheet } from 'react-native';
+import {
+  useWindowDimensions,
+  TouchableHighlight,
+  View,
+  TextInput,
+  StyleSheet
+} from 'react-native';
 import Noteball from './Noteball';
 
 export default function ChooseColorArea(props) {
 
   const screenWidth = useWindowDimensions().width;
-  const colorArr = ["#368567", "#409c7e", "#4ab599", "#56d4ba", "#5ee2bf", "#8fd6c4", "#97bfb4", "#11566b", "#22737f", "#4598a0", "#40bac9", "#52d5ea", "#7dc8db", "#89b8cc", "#611923", "#9a2a26", "#c14926", "#d25a37", "#de6431", "#69648c", "#8b84a6", "#b2afc4", "#c7c5d3", "#cecdd2", "#a3a2a8"];
+  const colorArr = [
+    "#368567",
+    "#409c7e",
+    "#4ab599",
+    "#56d4ba",
+    "#5ee2bf",
+    "#8fd6c4",
+    "#97bfb4",
+    "#11566b",
+    "#22737f",
+    "#4598a0",
+    "#40bac9",
+    "#52d5ea",
+    "#7dc8db",
+    "#89b8cc",
+    "#611923",
+    "#9a2a26",
+    "#c14926",
+    "#d25a37",
+    "#de6431",
+    "#69648c",
+    "#8b84a6",
+    "#b2afc4",
+    "#c7c5d3",
+    "#cecdd2",
+    "#a3a2a8"
+  ];
 
   return (
     <View style={styles.chooseColorArea}>
@@ -18,7 +50,10 @@ export default function ChooseColorArea(props) {
             colorArr.map((color,index) => {
               return (
                 <View key={index} style={{padding:0.04 * screenWidth}}>
-                  <TouchableHighlight style={{borderRadius:50}} onPress={() => props.setCurrentColor(color)}>
+                  <TouchableHighlight
+                    style={{borderRadius:50}}
+                    onPress={() => props.setCurrentColor(color)}
+                  >
                     <Noteball color={color} size={9}/>
                   </TouchableHighlight>
                 </View>

@@ -1,5 +1,11 @@
 import React from 'react';
-import { TouchableHighlight, StyleSheet, View, ScrollView, ImageBackground } from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  View,
+  ScrollView,
+  ImageBackground
+} from 'react-native';
 import Ftext from './Ftext';
 import Noteball from './Noteball';
 import ButtonRound from './ButtonRound';
@@ -10,17 +16,20 @@ export default function Home(props) {
 
   function SelectMap(props) {
     return (
-      <View style={styles.selectMap}>
-        <Noteball color={props.color} size={30} text={props.title} />
-        <View style={styles.mapDetails}>
-          <Ftext size={15} color='#999'>Description: Lorem Ipsum Dolor Amet &nbsp; Date created: 22-07-2020</Ftext>
+      <TouchableOpacity activeOpacity={0.7} onPress={props.setShowMap}>
+        <View style={styles.selectMap}>
+          <Noteball color={props.color} size={30} text={props.title} />
+          <View style={styles.mapDetails}>
+            <Ftext size={15} color='#999'>
+              Description: Lorem Ipsum Dolor Amet &nbsp; Date created: 22-07-2020
+            </Ftext>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 
   return (
-    <View style={styles.home}>
       <ImageBackground source={image} style={styles.image}>
         <View style={styles.header}>
           <Ftext size={30}>MindLee</Ftext>
@@ -32,6 +41,7 @@ export default function Home(props) {
                 <SelectMap
                   title={item.title}
                   color={item.color}
+                  setShowMap={props.setShowMap}
                   key={index}
                 />
               )
@@ -40,15 +50,10 @@ export default function Home(props) {
         </ScrollView>
         <ButtonRound text='＋' handlePress={props.setShowCreateNote} />
       </ImageBackground>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  home: {
-    flex: 1,
-    width:'100%'
-  },
   header: {
     alignItems:'flex-start',
     justifyContent:'flex-end',

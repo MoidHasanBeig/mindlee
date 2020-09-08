@@ -10,8 +10,7 @@ export default function NoteEditArea(props) {
         placeholder='Add a short note here'
         onChangeText={text => props.onChangeNote(text)}
         style={{...styles.noteInputBox,flex:1}}
-      >
-      </TextInput>
+      />
       <TextInput
         value={props.descValue}
         multiline
@@ -19,8 +18,7 @@ export default function NoteEditArea(props) {
         textAlignVertical='top'
         onChangeText={text => props.onChangeDesc(text)}
         style={{...styles.noteInputBox,flex:12,marginTop:0,paddingTop:20}}
-      >
-      </TextInput>
+      />
     </View>
   );
 }
@@ -36,6 +34,6 @@ const styles = StyleSheet.create({
     padding:10,
     borderRadius:10,
     fontSize:20,
-    fontFamily:'Montserrat'
+    fontFamily:'monospace'
   }
 });

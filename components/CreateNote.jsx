@@ -1,9 +1,17 @@
 import React,{ useEffect, useState, useRef } from 'react';
-import { Animated, TextInput, TouchableHighlight, StyleSheet, View, BackHandler } from 'react-native';
+import {
+  Animated,
+  TextInput,
+  TouchableHighlight,
+  StyleSheet,
+  View,
+  BackHandler
+} from 'react-native';
 import Ftext from './Ftext';
 import ButtonRound from './ButtonRound';
 import NoteEditArea from './NoteEditArea';
 import ChooseColorArea from './ChooseColorArea';
+import funx from '../functions';
 
 export default function CreateNote(props) {
   const [activeBtn,setActiveBtn] = useState('note');
@@ -49,31 +57,16 @@ export default function CreateNote(props) {
         color:currentColor
       }
     }
-    props.setShowCreateNote(false);
+    funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowCreateNote(false));
   }
 
   useEffect(() => {
-    Animated.timing(
-      fadeAnim,
-      {
-        toValue:1,
-        duration:300,
-        useNativeDriver:false
-      }
-    ).start();
-    Animated.timing(
-      swipeAnim,
-      {
-        toValue:0,
-        duration:200,
-        useNativeDriver:false
-      }
-    ).start();
+    funx.initiateAnim(swipeAnim,0,fadeAnim,1);
   });
 
   useEffect(() => {
     function backAction() {
-      props.setShowCreateNote(false);
+      funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowCreateNote(false));
       return true;
     }
     const backHandler = BackHandler.addEventListener(
@@ -123,7 +116,6 @@ const styles = StyleSheet.create({
     width:'100%',
     position:'absolute',
     left:0,
-    zIndex:2,
     elevation:5,
     backgroundColor:'#FFF'
   },

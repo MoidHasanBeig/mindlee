@@ -4,7 +4,10 @@ import Ftext from './Ftext';
 
 export default function ButtonRound(props) {
   return (
-    <TouchableHighlight style={styles.touchWrapperCreateNewMap} onPress={props.handlePress}>
+    <TouchableHighlight
+      style={styles.touchWrapperCreateNewMap}
+      onPress={props.handlePress}
+    >
       <View style={styles.createNewMap}>
         <Ftext size={30}>{props.text}</Ftext>
       </View>

@@ -15,7 +15,6 @@ export default function Noteball(props) {
       justifyContent:'center',
       alignItems:'center',
       overflow:'hidden',
-      elevation:3
     }}>
       <Ftext size={20}>{props.text}</Ftext>
     </View>
