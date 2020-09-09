@@ -56,14 +56,15 @@ export default function App() {
         <Home
           allMaps={operatingValue}
           setShowCreateNote={() => setShowCreateNote('newmap')}
-          setShowMap={() => setShowMap(true)}
+          setShowMap={(note) => setShowMap(note)}
           width={width}
         />
       }
       {
         showMap &&
         <MindMap
-          setShowMap={setShowMap}
+          setShowMap={() => setShowMap(false)}
+          note={showMap}
           width={width}
         />
       }

@@ -15,9 +15,9 @@ export default function AddItemButton(props) {
           transform: [
             { translateX: -0.025*props.width},
             { translateY: -0.025*props.width},
-            { rotate: '45deg' },
+            { rotate: props.angle },
             { translateX: 0.3*props.width},
-            { rotate: '-45deg' }
+            { rotate: '-'+props.angle }
           ]
         }
       ]}

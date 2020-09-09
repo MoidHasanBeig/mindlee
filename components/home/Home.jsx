@@ -16,9 +16,9 @@ export default function Home(props) {
 
   const SelectMap = function SelectMap(props) {
     return (
-      <TouchableOpacity activeOpacity={0.7} onPress={props.setShowMap}>
+      <TouchableOpacity activeOpacity={0.7} onPress={() => props.setShowMap(props.note)}>
         <View style={styles.selectMap}>
-          <Noteball color={props.color} size={30} text={props.title} />
+          <Noteball color={props.color} size={30} text={props.note.title} />
           <View style={styles.mapDetails}>
             <Ftext size={15} color='#999'>
               Description: Lorem Ipsum Dolor Amet &nbsp; Date created: 22-07-2020
@@ -44,9 +44,9 @@ export default function Home(props) {
             Object.values(props.allMaps).map((item,index) => {
               return (
                 <SelectMap
-                  title={item.title}
+                  note={item}
                   color={item.color}
-                  setShowMap={props.setShowMap}
+                  setShowMap={(note) => props.setShowMap(note)}
                   key={index}
                 />
               )

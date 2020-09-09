@@ -18,8 +18,18 @@ export default function MapContainer(props) {
         ]
       }
     ]}>
-      <AddItemButton width={props.width} />
+      {
+        props.note.subdata.length === 0 &&
+          <View style={{
+            width:'100%',
+            height:'100%'
+          }}>
+            <AddItemButton angle='45deg' width={props.width} />
+            <AddItemButton angle='225deg' width={props.width} />
+          </View>
+      }
       <Noteball
+        text={props.note.title}
         size={25}
         style={{
           position:'absolute',

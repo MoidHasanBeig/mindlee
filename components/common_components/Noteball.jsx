@@ -14,10 +14,17 @@ export default function Noteball(props) {
       backgroundColor: props.color || '#5CAB7D',
       borderRadius:ballSize || 13 * width / 100,
       justifyContent:'center',
-      alignItems:'center',
-      overflow:'hidden',
+      alignItems:'center'
     }}>
-      <Ftext size={20}>{props.text}</Ftext>
+      <View style={{
+        maxheight:'70%',
+        width:'75%',
+        overflow:'hidden',
+        paddingTop:10,
+        paddingBottom:10
+      }}>
+        <Ftext align='center' size={15}>{props.text.substring(0,50)}</Ftext>
+      </View>
     </View>
   );
 }
