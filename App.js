@@ -1,6 +1,11 @@
 import React,{ useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Home from './components/Home';
 import MindMap from './components/MindMap';
@@ -11,7 +16,7 @@ export default function App() {
   const [showHome,setShowHome] = useState(true);
   const [showMap,setShowMap] = useState(false);
   const [showCreateNote,setShowCreateNote] = useState(false);
-
+  const width = useWindowDimensions().width;
 
   const getMyObject = async () => {
     try {
@@ -52,12 +57,14 @@ export default function App() {
           allMaps={operatingValue}
           setShowCreateNote={() => setShowCreateNote('newmap')}
           setShowMap={() => setShowMap(true)}
+          width={width}
         />
       }
       {
         showMap &&
         <MindMap
           setShowMap={setShowMap}
+          width={width}
         />
       }
       {
@@ -67,6 +74,7 @@ export default function App() {
           setShowCreateNote={setShowCreateNote}
           setObjectValue={setObjectValue}
           operatingValue={operatingValue}
+          width={width}
         />
       }
     </View>

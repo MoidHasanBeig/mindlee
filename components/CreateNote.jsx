@@ -81,7 +81,12 @@ export default function CreateNote(props) {
       opacity:fadeAnim,
       top:swipeAnim
     }}>
-      <View style={styles.tabsHeader}>
+      <View style={[
+        styles.tabsHeader,
+        {
+          height: 0.25*props.width
+        }
+      ]}>
         <TouchableHighlight style={styles.touchWrapperTabs} onPress={() => setActiveBtn('note')}>
           <View style={{...styles.tab,backgroundColor: activeBtn === 'note' ? '#5CAB7D' : '#DDD'}}>
             <Ftext color={activeBtn === 'note' ? '#FFF' : '#5CAB7D'}>NOTE</Ftext>
@@ -99,13 +104,19 @@ export default function CreateNote(props) {
           onChangeNote={onChangeNote}
           descValue={descValue}
           onChangeDesc={onChangeDesc}
+          width={props.width}
         /> :
         <ChooseColorArea
           currentColor={currentColor}
           setCurrentColor={setCurrentColor}
+          width={props.width}
         />
       }
-      <ButtonRound text='✓' handlePress={() => saveNote()}/>
+      <ButtonRound
+        text='✓'
+        handlePress={() => saveNote()}
+        width={props.width}
+      />
     </Animated.View>
   );
 }
@@ -123,7 +134,6 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'flex-end',
     justifyContent:'space-around',
-    height:125
   },
   tab: {
     backgroundColor:'#DDD',

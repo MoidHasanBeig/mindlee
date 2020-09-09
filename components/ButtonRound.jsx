@@ -1,5 +1,9 @@
 import React from 'react';
-import { TouchableHighlight, StyleSheet, View  } from 'react-native';
+import {
+  TouchableHighlight,
+  StyleSheet,
+  View
+} from 'react-native';
 import Ftext from './Ftext';
 
 export default function ButtonRound(props) {
@@ -8,7 +12,13 @@ export default function ButtonRound(props) {
       style={styles.touchWrapperCreateNewMap}
       onPress={props.handlePress}
     >
-      <View style={styles.createNewMap}>
+      <View style={[
+        styles.createNewMap,
+        {
+          height:0.14*props.width,
+          width:0.14*props.width
+        }
+      ]}>
         <Ftext size={30}>{props.text}</Ftext>
       </View>
     </TouchableHighlight>
@@ -17,8 +27,6 @@ export default function ButtonRound(props) {
 
 const styles = StyleSheet.create({
   createNewMap: {
-    height:70,
-    width:70,
     backgroundColor:'#5CAB7D',
     alignItems:'center',
     justifyContent:'center',

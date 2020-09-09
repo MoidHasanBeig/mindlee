@@ -9,7 +9,13 @@ export default function NoteEditArea(props) {
         value={props.noteValue}
         placeholder='Add a short note here'
         onChangeText={text => props.onChangeNote(text)}
-        style={{...styles.noteInputBox,flex:1}}
+        style={[
+          styles.noteInputBox,
+          {
+            flex:1,
+            fontSize:0.04*props.width,
+          }
+        ]}
       />
       <TextInput
         value={props.descValue}
@@ -17,7 +23,15 @@ export default function NoteEditArea(props) {
         placeholder='Add description here'
         textAlignVertical='top'
         onChangeText={text => props.onChangeDesc(text)}
-        style={{...styles.noteInputBox,flex:12,marginTop:0,paddingTop:20}}
+        style={[
+          styles.noteInputBox,
+          {
+            flex:12,
+            marginTop:0,
+            paddingTop:20,
+            fontSize:0.04*props.width
+          }
+        ]}
       />
     </View>
   );
@@ -31,9 +45,9 @@ const styles = StyleSheet.create({
     borderWidth:1,
     borderColor:'#CCC',
     margin:20,
-    padding:10,
+    padding:5,
+    paddingLeft:15,
     borderRadius:10,
-    fontSize:20,
     fontFamily:'monospace'
   }
 });

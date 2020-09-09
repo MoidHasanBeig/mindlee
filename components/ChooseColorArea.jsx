@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  useWindowDimensions,
   TouchableHighlight,
   View,
   TextInput,
@@ -10,7 +9,6 @@ import Noteball from './Noteball';
 
 export default function ChooseColorArea(props) {
 
-  const screenWidth = useWindowDimensions().width;
   const colorArr = [
     "#368567",
     "#409c7e",
@@ -49,7 +47,7 @@ export default function ChooseColorArea(props) {
           {
             colorArr.map((color,index) => {
               return (
-                <View key={index} style={{padding:0.04 * screenWidth}}>
+                <View key={index} style={{padding:0.04 * props.width}}>
                   <TouchableHighlight
                     style={{borderRadius:50}}
                     onPress={() => props.setCurrentColor(color)}

@@ -14,7 +14,7 @@ const image = require('./assets/bg.png');
 
 export default function Home(props) {
 
-  function SelectMap(props) {
+  const SelectMap = function SelectMap(props) {
     return (
       <TouchableOpacity activeOpacity={0.7} onPress={props.setShowMap}>
         <View style={styles.selectMap}>
@@ -31,7 +31,12 @@ export default function Home(props) {
 
   return (
       <ImageBackground source={image} style={styles.image}>
-        <View style={styles.header}>
+        <View style={[
+          styles.header,
+          {
+            height: 0.25*props.width
+          }
+        ]}>
           <Ftext size={30}>MindLee</Ftext>
         </View>
         <ScrollView style={{paddingTop:30,paddingBottom:50}}>
@@ -48,7 +53,11 @@ export default function Home(props) {
             })
           }
         </ScrollView>
-        <ButtonRound text='＋' handlePress={props.setShowCreateNote} />
+        <ButtonRound
+          text='＋'
+          handlePress={props.setShowCreateNote}
+          width={props.width}
+        />
       </ImageBackground>
   );
 }
@@ -59,7 +68,6 @@ const styles = StyleSheet.create({
     justifyContent:'flex-end',
     backgroundColor:'#5CAB7D',
     width:'100%',
-    height:125,
     padding:20
   },
   selectMap: {
