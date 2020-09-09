@@ -39,7 +39,12 @@ export default function MindMap(props) {
       top:swipeAnim
     }}>
       <ImageBackground source={image} style={styles.image}>
-        <MapContainer note={props.note} width={props.width} />
+        <MapContainer
+          note={props.note}
+          width={props.width}
+          setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
+          operatingValue={props.operatingValue}
+        />
       </ImageBackground>
     </Animated.View>
   );

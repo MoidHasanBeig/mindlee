@@ -30,9 +30,10 @@ export default function CreateNote(props) {
     return unID;
   })();
 
-  function saveNote(id=null) {
+  function saveNote() {
     if (props.entryType === 'newmap') {
       data[newId] = {
+        id:newId,
         title:noteValue,
         desc:descValue,
         color:currentColor,
@@ -42,13 +43,14 @@ export default function CreateNote(props) {
       props.setObjectValue(data);
     } else if (props.entryType === 'newnote') {
       data[newId] = {
+        id:newId,
         title:noteValue,
         desc:descValue,
         color:currentColor,
         subdata:[],
-        parent:id
+        parent:props.parentId
       }
-      data[id].subdata.push(newId);
+      data[props.parentId].subdata.push(newId);
     } else {
       data[id] = {
         ...data[id],
@@ -59,6 +61,10 @@ export default function CreateNote(props) {
     }
     funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowCreateNote(false));
   }
+
+  useEffect(() => {
+    console.log(props.entryType);
+  })
 
   useEffect(() => {
     funx.initiateAnim(swipeAnim,0,fadeAnim,1);

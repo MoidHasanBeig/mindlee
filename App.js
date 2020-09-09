@@ -55,7 +55,7 @@ export default function App() {
         showHome &&
         <Home
           allMaps={operatingValue}
-          setShowCreateNote={() => setShowCreateNote('newmap')}
+          setShowCreateNote={() => setShowCreateNote({entryType:'newmap'})}
           setShowMap={(note) => setShowMap(note)}
           width={width}
         />
@@ -64,14 +64,17 @@ export default function App() {
         showMap &&
         <MindMap
           setShowMap={() => setShowMap(false)}
+          setShowCreateNote={(type) => setShowCreateNote(type)}
           note={showMap}
+          operatingValue={operatingValue}
           width={width}
         />
       }
       {
         showCreateNote &&
         <CreateNote
-          entryType={showCreateNote}
+          entryType={showCreateNote.entryType}
+          parentId={showCreateNote.parentId}
           setShowCreateNote={setShowCreateNote}
           setObjectValue={setObjectValue}
           operatingValue={operatingValue}

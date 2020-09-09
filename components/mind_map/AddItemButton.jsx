@@ -21,7 +21,10 @@ export default function AddItemButton(props) {
           ]
         }
       ]}
-      onPress={() => console.log('hi')}
+      onPress={() => props.setShowCreateNote({
+        entryType:'newnote',
+        parentId:props.parentId
+      })}
     >
       <Ftext>+</Ftext>
     </TouchableOpacity>

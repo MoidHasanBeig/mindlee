@@ -24,8 +24,18 @@ export default function MapContainer(props) {
             width:'100%',
             height:'100%'
           }}>
-            <AddItemButton angle='45deg' width={props.width} />
-            <AddItemButton angle='225deg' width={props.width} />
+            <AddItemButton
+              setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
+              angle='45deg'
+              width={props.width}
+              parentId={props.note.id}
+            />
+            <AddItemButton
+              setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
+              angle='225deg'
+              width={props.width}
+              parentId={props.note.id}
+             />
           </View>
       }
       <Noteball
@@ -40,6 +50,27 @@ export default function MapContainer(props) {
             { translateY: -12.5*props.width/100 }
           ]
         }}/>
+        {
+          props.note.subdata.map((item,index) => {
+            return (
+              <Noteball
+                key={index}
+                text={props.operatingValue[item].title}
+                size={25}
+                style={{
+                  position:'absolute',
+                  top:'50%',
+                  left:'50%',
+                  transform:[
+                    { translateX: -12.5*props.width/100 },
+                    { translateY: -12.5*props.width/100 },
+                    { translateX: 0.3*props.width}
+                  ]
+                }}
+              />
+            )
+          })
+        }
     </View>
   );
 }

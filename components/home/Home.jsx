@@ -43,6 +43,7 @@ export default function Home(props) {
           {
             Object.values(props.allMaps).map((item,index) => {
               return (
+                item.parent === 'home' &&
                 <SelectMap
                   note={item}
                   color={item.color}
