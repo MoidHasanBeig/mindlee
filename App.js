@@ -7,9 +7,9 @@ import {
   useWindowDimensions
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Home from './components/Home';
-import MindMap from './components/MindMap';
-import CreateNote from './components/CreateNote';
+import Home from './components/home/Home';
+import MindMap from './components/mind_map/MindMap';
+import CreateNote from './components/create_note/CreateNote';
 
 export default function App() {
   const [operatingValue, setOperatingValue] = useState({});

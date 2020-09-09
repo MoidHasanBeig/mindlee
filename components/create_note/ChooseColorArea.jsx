@@ -5,7 +5,7 @@ import {
   TextInput,
   StyleSheet
 } from 'react-native';
-import Noteball from './Noteball';
+import Noteball from '../common_components/Noteball';
 
 export default function ChooseColorArea(props) {
 

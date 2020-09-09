@@ -8,10 +8,11 @@ export default function Noteball(props) {
 
   return (
     <View style={{
-      height:ballSize || 120,
-      width:ballSize || 120,
+      ...props.style,
+      height:ballSize || 25 * width / 100,
+      width:ballSize || 25 * width / 100,
       backgroundColor: props.color || '#5CAB7D',
-      borderRadius:ballSize || 75,
+      borderRadius:ballSize || 13 * width / 100,
       justifyContent:'center',
       alignItems:'center',
       overflow:'hidden',

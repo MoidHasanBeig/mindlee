@@ -7,11 +7,11 @@ import {
   View,
   BackHandler
 } from 'react-native';
-import Ftext from './Ftext';
-import ButtonRound from './ButtonRound';
+import Ftext from '../common_components/Ftext';
+import ButtonRound from '../common_components/ButtonRound';
 import NoteEditArea from './NoteEditArea';
 import ChooseColorArea from './ChooseColorArea';
-import funx from '../functions';
+import funx from '../../functions';
 
 export default function CreateNote(props) {
   const [activeBtn,setActiveBtn] = useState('note');

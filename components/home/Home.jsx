@@ -6,11 +6,11 @@ import {
   ScrollView,
   ImageBackground
 } from 'react-native';
-import Ftext from './Ftext';
-import Noteball from './Noteball';
-import ButtonRound from './ButtonRound';
+import Ftext from '../common_components/Ftext';
+import Noteball from '../common_components/Noteball';
+import ButtonRound from '../common_components/ButtonRound';
 
-const image = require('./assets/bg.png');
+const image = require('../assets/bg.png');
 
 export default function Home(props) {
 
