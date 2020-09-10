@@ -24,11 +24,7 @@ export default function CreateNote(props) {
 
   const data = props.operatingValue;
 
-  let newId = (function uniqueId() {
-    let d = new Date();
-    let unID = d.getTime();
-    return unID;
-  })();
+  let newId = funx.uniqueId();
 
   function saveNote() {
     if (props.entryType === 'newmap') {

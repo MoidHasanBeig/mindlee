@@ -23,7 +23,7 @@ export default function Noteball(props) {
         paddingTop:10,
         paddingBottom:10
       }}>
-        <Ftext align='center' size={15}>{props.text.substring(0,50)}</Ftext>
+        <Ftext align='center' size={15}>{props.text && props.text.substring(0,50)}</Ftext>
       </View>
     </View>
   );

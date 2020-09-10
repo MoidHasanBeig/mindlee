@@ -6,6 +6,7 @@ import {
   StyleSheet
 } from 'react-native';
 import Noteball from '../common_components/Noteball';
+import funx from '../../functions';
 
 export default function ChooseColorArea(props) {
 
@@ -47,7 +48,7 @@ export default function ChooseColorArea(props) {
           {
             colorArr.map((color,index) => {
               return (
-                <View key={index} style={{padding:0.04 * props.width}}>
+                <View key={funx.uniqueId(index)} style={{padding:0.04 * props.width}}>
                   <TouchableHighlight
                     style={{borderRadius:50}}
                     onPress={() => props.setCurrentColor(color)}
