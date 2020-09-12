@@ -46,7 +46,7 @@ export default function CreateNote(props) {
         subdata:[],
         parent:props.parentId
       }
-      data[props.parentId].subdata.push(newId);
+      data[props.parentId].subdata.splice(props.index,0,newId);
     } else {
       data[id] = {
         ...data[id],
@@ -57,10 +57,6 @@ export default function CreateNote(props) {
     }
     funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowCreateNote(false));
   }
-
-  useEffect(() => {
-    console.log(props.entryType);
-  })
 
   useEffect(() => {
     funx.initiateAnim(swipeAnim,0,fadeAnim,1);

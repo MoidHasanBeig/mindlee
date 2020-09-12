@@ -13,8 +13,10 @@ import funx from '../../functions';
 export default function MapContainer(props) {
   const width = useWindowDimensions().width;
   const height = useWindowDimensions().height;
-  const angle = useRef(new Animated.Value(0)).current;
+  const angle = useRef(new Animated.Value(40)).current;
   const initialAngle = useRef(new Animated.Value(0)).current;
+  const commonAngle = 360/props.note.subdata.length;
+  const offsetAngle = commonAngle/2;
   const spin = angle.interpolate({
     inputRange:[0,360],
     outputRange:['0deg','360deg']
@@ -56,9 +58,6 @@ export default function MapContainer(props) {
     })
   ).current;
 
-  const commonAngle = 360/props.note.subdata.length;
-  const offsetAngle = commonAngle/2;
-
   return (
     <Animated.View style={[
       styles.mapContainer,
@@ -82,54 +81,37 @@ export default function MapContainer(props) {
             width:'100%',
             height:'100%'
           }}>
-            <Animated.View
-              style={
-                {
-                  position:'absolute',
-                  top:'50%',
-                  left:'50%',
-                  transform: [
-                    { translateX: -0.045*props.width},
-                    { translateY: -0.045*props.width},
-                    { rotate: '45deg' },
-                    { translateX: 0.35*props.width},
-                    { rotate: '-45deg' },
-                    { rotate: reverseSpin},
-                    { perspective: 1000 }
-                  ]
-                }
-              }
-            >
-              <AddItemButton
-                setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
-                width={props.width}
-                parentId={props.note.id}
-              />
-            </Animated.View>
-            <Animated.View
-              style={
-                {
-                  position:'absolute',
-                  top:'50%',
-                  left:'50%',
-                  transform: [
-                    { translateX: -0.045*props.width},
-                    { translateY: -0.045*props.width},
-                    { rotate: '225deg' },
-                    { translateX: 0.35*props.width},
-                    { rotate: '-225deg' },
-                    { rotate: reverseSpin },
-                    { perspective: 1000 }
-                  ]
-                }
-              }
-            >
-              <AddItemButton
-                setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
-                width={props.width}
-                parentId={props.note.id}
-               />
-             </Animated.View>
+          {
+            [1,2,3,4].map((item,index) => {
+              return (
+                <Animated.View
+                  key={index}
+                  style={
+                    {
+                      position:'absolute',
+                      top:'50%',
+                      left:'50%',
+                      transform: [
+                        { translateX: -0.045*props.width},
+                        { translateY: -0.045*props.width},
+                        { rotate: index*90+20+'deg' },
+                        { translateX: 0.35*props.width},
+                        { rotate: -1*(index*90+20)+'deg' },
+                        { rotate: reverseSpin},
+                        { perspective: 1000 }
+                      ]
+                    }
+                  }
+                >
+                  <AddItemButton
+                    setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
+                    width={props.width}
+                    parentId={props.note.id}
+                  />
+                </Animated.View>
+              )
+            })
+          }
           </View>
       }
       <Animated.View style={{
@@ -151,11 +133,14 @@ export default function MapContainer(props) {
         {
           props.note.subdata.map((item,index) => {
             return (
-              <View style={{
-                position:'absolute',
-                height:'100%',
-                width:'100%'
-              }}>
+              <View
+                key={funx.uniqueId(index)}
+                style={{
+                  position:'absolute',
+                  height:'100%',
+                  width:'100%'
+                }}
+              >
                 <Animated.View
                   style={{
                     position:'absolute',
@@ -173,7 +158,6 @@ export default function MapContainer(props) {
                   }}
                 >
                   <Noteball
-                    key={funx.uniqueId(index)}
                     text={props.operatingValue[item].title}
                     size={20}
                   />
@@ -197,7 +181,7 @@ export default function MapContainer(props) {
                   }
                 >
                   <AddItemButton
-                    key={funx.uniqueId(index+0.1)}
+                    index={index}
                     setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
                     width={props.width}
                     parentId={props.note.id}

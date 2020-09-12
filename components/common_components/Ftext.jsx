@@ -3,7 +3,6 @@ import { Text, useWindowDimensions } from 'react-native';
 
 export default function Ftext(props) {
   const width = useWindowDimensions().width;
-
   return (
     <Text style={
       {

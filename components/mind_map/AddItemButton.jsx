@@ -22,7 +22,8 @@ export default function AddItemButton(props) {
         () => {
           props.setShowCreateNote({
             entryType:'newnote',
-            parentId:props.parentId
+            parentId:props.parentId,
+            index:props.index
           });
         }
       }
