@@ -37,7 +37,7 @@ export default function Home(props) {
             height: 0.25*props.width
           }
         ]}>
-          <Ftext size={30}>MindLee</Ftext>
+          <Ftext size={30}>Mindyo</Ftext>
         </View>
         <ScrollView style={{paddingTop:30,paddingBottom:50}}>
           {

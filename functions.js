@@ -30,10 +30,14 @@ const myFunctions = (() => {
   }
 
   //touch angle
-  function touchAngle(x,y,width,height) {
+  function touchAngle(x,y,width,height,initialAngle) {
     let angle = Math.atan2(y-height/2, x-width/2) * (180 / Math.PI);
     if (angle < 0) {
       angle += 360;
+    }
+    angle = angle>initialAngle ? angle-initialAngle : 360+angle-initialAngle;
+    while(angle>=360) {
+      angle-=360;
     }
     return angle;
   }

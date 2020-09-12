@@ -71,3 +71,11 @@ g0:{
   ...
 }
 }
+
+
+Gesture system for rotating mindmap:
+
+(1,1) vx,vy -vx,vy vx,-vy -vx,-vy
+(1,-1) vx,vy -vx,vy vx,-vy -vx,-vy
+(-1,-1) vx,vy -vx,vy vx,-vy -vx,-vy
+(-1,1) vx,vy -vx,vy vx,-vy -vx,-vy
