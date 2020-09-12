@@ -75,6 +75,7 @@ export default function App() {
         <CreateNote
           entryType={showCreateNote.entryType}
           parentId={showCreateNote.parentId}
+          index={showCreateNote.index}
           setShowCreateNote={setShowCreateNote}
           setObjectValue={setObjectValue}
           operatingValue={operatingValue}

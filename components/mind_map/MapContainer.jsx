@@ -62,12 +62,12 @@ export default function MapContainer(props) {
     <Animated.View style={[
       styles.mapContainer,
       {
-        width: 0.7*props.width,
-        height: 0.7*props.width,
-        borderRadius: 0.35*props.width,
+        width: 0.9*props.width,
+        height: 0.9*props.width,
+        borderRadius: 0.45*props.width,
         transform:[
-          { translateX: -0.35*props.width },
-          { translateY: -0.35*props.width },
+          { translateX: -0.45*props.width },
+          { translateY: -0.45*props.width },
           { rotate: spin},
           { perspective: 1000 }
         ]
@@ -75,6 +75,18 @@ export default function MapContainer(props) {
     ]}
     {...panResponder.panHandlers}
     >
+      <View style={[
+        styles.circularBorder,
+        {
+          width: 0.7*props.width,
+          height: 0.7*props.width,
+          borderRadius: 0.35*props.width,
+          transform:[
+            { translateX: -0.35*props.width },
+            { translateY: -0.35*props.width },
+          ]
+        }
+      ]} />
       {
         props.note.subdata.length === 0 &&
           <View style={{
@@ -104,6 +116,7 @@ export default function MapContainer(props) {
                   }
                 >
                   <AddItemButton
+                    index={0}
                     setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
                     width={props.width}
                     parentId={props.note.id}
@@ -126,6 +139,7 @@ export default function MapContainer(props) {
         ]
       }}>
         <Noteball
+          onPress={() => funx.editNote()}
           text={props.note.title}
           size={25}
         />
@@ -198,9 +212,16 @@ export default function MapContainer(props) {
 const styles = StyleSheet.create({
   mapContainer: {
     position:'absolute',
+    top:'50%',
+    left:'50%',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  circularBorder: {
+    position:'absolute',
     borderWidth:1,
     borderColor:'#DDD',
     top:'50%',
-    left:'50%',
+    left:'50%'
   }
 });

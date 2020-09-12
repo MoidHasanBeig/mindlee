@@ -18,7 +18,12 @@ export default function Home(props) {
     return (
       <TouchableOpacity activeOpacity={0.7} onPress={() => props.setShowMap(props.note)}>
         <View style={styles.selectMap}>
-          <Noteball color={props.color} size={30} text={props.note.title} />
+          <Noteball
+            onPress={() => props.setShowMap(props.note)}
+            color={props.color}
+            size={30}
+            text={props.note.title}
+          />
           <View style={styles.mapDetails}>
             <Ftext size={15} color='#999'>
               Description: Lorem Ipsum Dolor Amet &nbsp; Date created: 22-07-2020

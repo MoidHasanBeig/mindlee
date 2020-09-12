@@ -46,7 +46,7 @@ export default function CreateNote(props) {
         subdata:[],
         parent:props.parentId
       }
-      data[props.parentId].subdata.splice(props.index,0,newId);
+      data[props.parentId].subdata.splice(props.index+1,0,newId);
     } else {
       data[id] = {
         ...data[id],

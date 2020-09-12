@@ -42,10 +42,16 @@ const myFunctions = (() => {
     return angle;
   }
 
+  //edit note
+  function editNote() {
+    console.log('edit');
+  }
+
   const funx = {
-    initiateAnim:initiateAnim,
-    uniqueId:uniqueId,
-    touchAngle:touchAngle
+    initiateAnim,
+    uniqueId,
+    touchAngle,
+    editNote
   }
   return funx;
 })();
