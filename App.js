@@ -63,7 +63,7 @@ export default function App() {
       {
         showMap &&
         <MindMap
-          setShowMap={() => setShowMap(false)}
+          setShowMap={(note) => setShowMap(note)}
           setShowCreateNote={(type) => setShowCreateNote(type)}
           note={showMap}
           operatingValue={operatingValue}

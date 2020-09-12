@@ -32,6 +32,11 @@ export default function MapContainer(props) {
       onPanResponderGrant: (evt, gestureState) => {
         let theta = funx.touchAngle(evt.nativeEvent.pageX,evt.nativeEvent.pageY,width,height,0);
         initialAngle.setValue(theta);
+        while (angle._value>=360) {
+          angle.setValue(angle._value-360);
+        }
+        angle.setOffset(angle._value);
+        angle.setValue(0);
       },
       onPanResponderMove: (evt, gestureState) => {
           let theta = funx.touchAngle(evt.nativeEvent.pageX,evt.nativeEvent.pageY,width,height,initialAngle._value);
@@ -48,11 +53,6 @@ export default function MapContainer(props) {
           }
         ).start(() => {
           angle.flattenOffset();
-          while (angle._value>=360) {
-            angle.setValue(angle._value-360);
-          }
-          angle.setOffset(angle._value);
-          angle.setValue(0);
         });
       }
     })
@@ -78,12 +78,12 @@ export default function MapContainer(props) {
       <View style={[
         styles.circularBorder,
         {
-          width: 0.7*props.width,
-          height: 0.7*props.width,
-          borderRadius: 0.35*props.width,
+          width: 0.6*props.width,
+          height: 0.6*props.width,
+          borderRadius: 0.3*props.width,
           transform:[
-            { translateX: -0.35*props.width },
-            { translateY: -0.35*props.width },
+            { translateX: -0.3*props.width },
+            { translateY: -0.3*props.width },
           ]
         }
       ]} />
@@ -161,10 +161,10 @@ export default function MapContainer(props) {
                     top:'50%',
                     left:'50%',
                     transform:[
-                      { translateX: -10*props.width/100 },
-                      { translateY: -10*props.width/100 },
+                      { translateX: -0.1*props.width },
+                      { translateY: -0.1*props.width },
                       { rotate: index*commonAngle+'deg'},
-                      { translateX: 0.35*props.width},
+                      { translateX: 0.3*props.width},
                       { rotate: '-'+index*commonAngle+'deg'},
                       { rotate: reverseSpin },
                       { perspective: 1000 }
@@ -172,6 +172,7 @@ export default function MapContainer(props) {
                   }}
                 >
                   <Noteball
+                    onPress={() => funx.mapTraverse(item,"in",props.setShowMap,props.operatingValue)}
                     text={props.operatingValue[item].title}
                     size={20}
                   />
@@ -186,7 +187,7 @@ export default function MapContainer(props) {
                         { translateX: -0.045*props.width},
                         { translateY: -0.045*props.width},
                         { rotate: index*commonAngle+offsetAngle+'deg' },
-                        { translateX: 0.35*props.width},
+                        { translateX: 0.3*props.width},
                         { rotate: -1*(index*commonAngle+offsetAngle)+'deg' },
                         { rotate: reverseSpin },
                         { perspective: 1000 }

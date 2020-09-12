@@ -23,7 +23,8 @@ export default function MindMap(props) {
 
   useEffect(() => {
     function backAction() {
-      funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowMap(false));
+      if (props.note.parent === 'home') funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowMap(false));
+      else funx.mapTraverse(props.note.parent,"out",props.setShowMap,props.operatingValue);
       return true;
     }
     const backHandler = BackHandler.addEventListener(
@@ -42,6 +43,7 @@ export default function MindMap(props) {
         <MapContainer
           note={props.note}
           width={props.width}
+          setShowMap={(note) => props.setShowMap(note)}
           setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
           operatingValue={props.operatingValue}
         />

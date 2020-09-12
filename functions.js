@@ -47,11 +47,20 @@ const myFunctions = (() => {
     console.log('edit');
   }
 
+  //traverse map
+  function mapTraverse(id,direction,setShowMap,operatingValue) {
+    setShowMap(operatingValue[id]);
+    if (direction === "in") {
+      
+    }
+  }
+
   const funx = {
     initiateAnim,
     uniqueId,
     touchAngle,
-    editNote
+    editNote,
+    mapTraverse
   }
   return funx;
 })();
