@@ -51,7 +51,7 @@ const myFunctions = (() => {
   function mapTraverse(id,direction,setShowMap,operatingValue) {
     setShowMap(operatingValue[id]);
     if (direction === "in") {
-      
+
     }
   }
 

@@ -15,7 +15,7 @@ export default function Noteball(props) {
         height:ballSize || 25 * width / 100,
         width:ballSize || 25 * width / 100,
         backgroundColor: props.color || '#5CAB7D',
-        borderRadius:ballSize || 13 * width / 100,
+        borderRadius:ballSize*0.5 || 12.5 * width / 100,
         justifyContent:'center',
         alignItems:'center'
       }}

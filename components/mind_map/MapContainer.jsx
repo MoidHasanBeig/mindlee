@@ -1,4 +1,4 @@
-import React,{ useState, useRef } from 'react';
+import React,{ useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -32,11 +32,6 @@ export default function MapContainer(props) {
       onPanResponderGrant: (evt, gestureState) => {
         let theta = funx.touchAngle(evt.nativeEvent.pageX,evt.nativeEvent.pageY,width,height,0);
         initialAngle.setValue(theta);
-        while (angle._value>=360) {
-          angle.setValue(angle._value-360);
-        }
-        angle.setOffset(angle._value);
-        angle.setValue(0);
       },
       onPanResponderMove: (evt, gestureState) => {
           let theta = funx.touchAngle(evt.nativeEvent.pageX,evt.nativeEvent.pageY,width,height,initialAngle._value);
@@ -45,21 +40,26 @@ export default function MapContainer(props) {
       onPanResponderRelease: (evt, {vx, vy}) => {
         let xPos = Math.sign(evt.nativeEvent.pageX-width/2);
         let yPos = Math.sign(evt.nativeEvent.pageY-height/2);
-        let velocity = xPos*vy-yPos*vx;
+        let velocity = (xPos*vy-yPos*vx)*0.4;
         Animated.decay(angle,{
             velocity: velocity,
-            deceleration: 0.99,
+            deceleration: 0.997,
             useNativeDriver: false
           }
         ).start(() => {
           angle.flattenOffset();
+          while (angle._value>=360) {
+            angle.setValue(angle._value-360);
+          }
+          angle.setOffset(angle._value);
+          angle.setValue(0);
         });
       }
     })
   ).current;
 
   return (
-    <Animated.View style={[
+    <View style={[
       styles.mapContainer,
       {
         width: 0.9*props.width,
@@ -68,8 +68,6 @@ export default function MapContainer(props) {
         transform:[
           { translateX: -0.45*props.width },
           { translateY: -0.45*props.width },
-          { rotate: spin},
-          { perspective: 1000 }
         ]
       }
     ]}
@@ -107,10 +105,10 @@ export default function MapContainer(props) {
                         { translateX: -0.045*props.width},
                         { translateY: -0.045*props.width},
                         { rotate: index*90+20+'deg' },
-                        { translateX: 0.35*props.width},
+                        { rotate: spin },
+                        { translateX: 0.3*props.width},
                         { rotate: -1*(index*90+20)+'deg' },
-                        { rotate: reverseSpin},
-                        { perspective: 1000 }
+                        { rotate: reverseSpin}
                       ]
                     }
                   }
@@ -127,15 +125,13 @@ export default function MapContainer(props) {
           }
           </View>
       }
-      <Animated.View style={{
+      <View style={{
         position:'absolute',
         top:'50%',
         left:'50%',
         transform:[
           { translateX: -12.5*props.width/100 },
-          { translateY: -12.5*props.width/100 },
-          { rotate: reverseSpin },
-          { perspective: 1000 }
+          { translateY: -12.5*props.width/100 }
         ]
       }}>
         <Noteball
@@ -143,7 +139,7 @@ export default function MapContainer(props) {
           text={props.note.title}
           size={25}
         />
-      </Animated.View>
+      </View>
         {
           props.note.subdata.map((item,index) => {
             return (
@@ -164,10 +160,10 @@ export default function MapContainer(props) {
                       { translateX: -0.1*props.width },
                       { translateY: -0.1*props.width },
                       { rotate: index*commonAngle+'deg'},
+                      { rotate: spin },
                       { translateX: 0.3*props.width},
                       { rotate: '-'+index*commonAngle+'deg'},
-                      { rotate: reverseSpin },
-                      { perspective: 1000 }
+                      { rotate: reverseSpin }
                     ]
                   }}
                 >
@@ -187,10 +183,10 @@ export default function MapContainer(props) {
                         { translateX: -0.045*props.width},
                         { translateY: -0.045*props.width},
                         { rotate: index*commonAngle+offsetAngle+'deg' },
+                        { rotate: spin },
                         { translateX: 0.3*props.width},
                         { rotate: -1*(index*commonAngle+offsetAngle)+'deg' },
-                        { rotate: reverseSpin },
-                        { perspective: 1000 }
+                        { rotate: reverseSpin }
                       ]
                     }
                   }
@@ -206,7 +202,7 @@ export default function MapContainer(props) {
             )
           })
         }
-    </Animated.View>
+    </View>
   );
 }
 
