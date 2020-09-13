@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Ftext from '../common_components/Ftext';
 import MapContainer from './MapContainer';
+import GoBack from './GoBack';
 import funx from '../../functions';
 
 const image = require('../assets/bg.png');
@@ -17,16 +18,17 @@ export default function MindMap(props) {
   const swipeAnim = useRef(new Animated.Value(500)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  function backAction() {
+    if (props.note.parent === 'home') funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowMap(false));
+    else funx.mapTraverse(props.note.parent,"out",props.setShowMap,props.operatingValue);
+    return true;
+  }
+
   useEffect(() => {
     funx.initiateAnim(swipeAnim,0,fadeAnim,1);
   });
 
   useEffect(() => {
-    function backAction() {
-      if (props.note.parent === 'home') funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowMap(false));
-      else funx.mapTraverse(props.note.parent,"out",props.setShowMap,props.operatingValue);
-      return true;
-    }
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",backAction
     );
@@ -40,6 +42,11 @@ export default function MindMap(props) {
       top:swipeAnim
     }}>
       <ImageBackground source={image} style={styles.image}>
+        <GoBack
+          width={props.width}
+          traverse={() => backAction()}
+          id={props.note.parent}
+        />
         <MapContainer
           note={props.note}
           width={props.width}
