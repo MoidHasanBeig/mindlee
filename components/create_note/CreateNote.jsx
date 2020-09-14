@@ -12,6 +12,7 @@ import ButtonRound from '../common_components/ButtonRound';
 import NoteEditArea from './NoteEditArea';
 import ChooseColorArea from './ChooseColorArea';
 import funx from '../../functions';
+import animx from '../../animations';
 
 export default function CreateNote(props) {
   const [activeBtn,setActiveBtn] = useState('note');
@@ -55,16 +56,16 @@ export default function CreateNote(props) {
         color:currentColor
       }
     }
-    funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowCreateNote(false));
+    animx.navigateScreenAnim(swipeAnim,500,fadeAnim,0,() => props.setShowCreateNote(false));
   }
 
   useEffect(() => {
-    funx.initiateAnim(swipeAnim,0,fadeAnim,1);
+    animx.navigateScreenAnim(swipeAnim,0,fadeAnim,1);
   });
 
   useEffect(() => {
     function backAction() {
-      funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowCreateNote(false));
+      animx.navigateScreenAnim(swipeAnim,500,fadeAnim,0,() => props.setShowCreateNote(false));
       return true;
     }
     const backHandler = BackHandler.addEventListener(

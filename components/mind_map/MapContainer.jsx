@@ -9,11 +9,12 @@ import {
 import AddItemButton from './AddItemButton';
 import Noteball from '../common_components/Noteball';
 import funx from '../../functions';
+import animx from '../../animations';
 
 export default function MapContainer(props) {
   const width = useWindowDimensions().width;
   const height = useWindowDimensions().height;
-  const angle = useRef(new Animated.Value(40)).current;
+  const angle = useRef(new Animated.Value(0)).current;
   const initialAngle = useRef(new Animated.Value(0)).current;
   const commonAngle = 360/props.note.subdata.length;
   const offsetAngle = commonAngle/2;
@@ -25,16 +26,38 @@ export default function MapContainer(props) {
     inputRange:[0,360],
     outputRange:['-0deg','-360deg']
   });
+  //for transition snimations
+  const scaleContainer = useRef(new Animated.Value(1)).current;
+  const fadeContainer = useRef(new Animated.Value(1)).current;
+  const mapAnimConfig = {
+    scaleContainer,
+    fadeContainer,
+    scaleContainerVal:2,
+    fadeContainerVal:0
+  }
 
   const panResponder = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: (evt, gestureState) => !(gestureState.dx === 0 && gestureState.dy === 0),
+      onMoveShouldSetPanResponder:
+        (evt, gestureState) => !(gestureState.dx === 0 && gestureState.dy === 0),
       onPanResponderGrant: (evt, gestureState) => {
-        let theta = funx.touchAngle(evt.nativeEvent.pageX,evt.nativeEvent.pageY,width,height,0);
+        let theta = funx.touchAngle(
+          evt.nativeEvent.pageX,
+          evt.nativeEvent.pageY,
+          width,
+          height,
+          0
+        );
         initialAngle.setValue(theta);
       },
       onPanResponderMove: (evt, gestureState) => {
-          let theta = funx.touchAngle(evt.nativeEvent.pageX,evt.nativeEvent.pageY,width,height,initialAngle._value);
+          let theta = funx.touchAngle(
+            evt.nativeEvent.pageX,
+            evt.nativeEvent.pageY,
+            width,
+            height,
+            initialAngle._value
+          );
           angle.setValue(theta);
       },
       onPanResponderRelease: (evt, {vx, vy}) => {
@@ -73,15 +96,17 @@ export default function MapContainer(props) {
     ]}
     {...panResponder.panHandlers}
     >
-      <View style={[
+      <Animated.View style={[
         styles.circularBorder,
         {
           width: 0.6*props.width,
           height: 0.6*props.width,
           borderRadius: 0.3*props.width,
+          opacity: fadeContainer,
           transform:[
             { translateX: -0.3*props.width },
             { translateY: -0.3*props.width },
+            { scale: scaleContainer },
           ]
         }
       ]} />
@@ -108,14 +133,16 @@ export default function MapContainer(props) {
                         { rotate: spin },
                         { translateX: 0.3*props.width},
                         { rotate: -1*(index*90+20)+'deg' },
-                        { rotate: reverseSpin}
+                        { rotate: reverseSpin},
                       ]
                     }
                   }
                 >
                   <AddItemButton
                     index={0}
-                    setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
+                    setShowCreateNote={
+                      (entry) => props.setShowCreateNote(entry)
+                    }
                     width={props.width}
                     parentId={props.note.id}
                   />
@@ -168,7 +195,16 @@ export default function MapContainer(props) {
                   }}
                 >
                   <Noteball
-                    onPress={() => funx.mapTraverse(item,"in",props.setShowMap,props.operatingValue)}
+                    onPress={() =>
+                      animx.mindmapTransitions(
+                        mapAnimConfig,
+                        funx.mapTraverse(
+                          item,
+                          "in",
+                          props.setShowMap,
+                          props.operatingValue
+                        )
+                      )}
                     text={props.operatingValue[item].title}
                     size={20}
                   />
@@ -180,11 +216,11 @@ export default function MapContainer(props) {
                       top:'50%',
                       left:'50%',
                       transform: [
-                        { translateX: -0.045*props.width},
-                        { translateY: -0.045*props.width},
+                        { translateX: -0.045*props.width },
+                        { translateY: -0.045*props.width },
                         { rotate: index*commonAngle+offsetAngle+'deg' },
                         { rotate: spin },
-                        { translateX: 0.3*props.width},
+                        { translateX: 0.3*props.width },
                         { rotate: -1*(index*commonAngle+offsetAngle)+'deg' },
                         { rotate: reverseSpin }
                       ]

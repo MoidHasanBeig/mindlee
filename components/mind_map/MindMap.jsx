@@ -11,6 +11,7 @@ import Ftext from '../common_components/Ftext';
 import MapContainer from './MapContainer';
 import GoBack from './GoBack';
 import funx from '../../functions';
+import animx from '../../animations';
 
 const image = require('../assets/bg.png');
 
@@ -19,13 +20,13 @@ export default function MindMap(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   function backAction() {
-    if (props.note.parent === 'home') funx.initiateAnim(swipeAnim,500,fadeAnim,0,() => props.setShowMap(false));
+    if (props.note.parent === 'home') animx.navigateScreenAnim(swipeAnim,500,fadeAnim,0,() => props.setShowMap(false));
     else funx.mapTraverse(props.note.parent,"out",props.setShowMap,props.operatingValue);
     return true;
   }
 
   useEffect(() => {
-    funx.initiateAnim(swipeAnim,0,fadeAnim,1);
+    animx.navigateScreenAnim(swipeAnim,0,fadeAnim,1);
   });
 
   useEffect(() => {

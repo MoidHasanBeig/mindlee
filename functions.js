@@ -1,26 +1,4 @@
-import { Animated } from 'react-native';
-
 const myFunctions = (() => {
-
-//for transition animations
-  function initiateAnim(swipeAnim,swipeVal,fadeAnim,fadeVal,cb=null) {
-    Animated.timing(
-      swipeAnim,
-      {
-        toValue:swipeVal,
-        duration:200,
-        useNativeDriver:false
-      }
-    ).start();
-    Animated.timing(
-      fadeAnim,
-      {
-        toValue:fadeVal,
-        duration:200,
-        useNativeDriver:false
-      }
-    ).start(cb);
-  }
 
   // unique ID generator
   function uniqueId(seed=0) {
@@ -50,13 +28,9 @@ const myFunctions = (() => {
   //traverse map
   function mapTraverse(id,direction,setShowMap,operatingValue) {
     setShowMap(operatingValue[id]);
-    if (direction === "in") {
-
-    }
   }
 
   const funx = {
-    initiateAnim,
     uniqueId,
     touchAngle,
     editNote,
