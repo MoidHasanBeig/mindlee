@@ -2,9 +2,12 @@ import React from 'react';
 import {
   TouchableHighlight,
   StyleSheet,
-  View
+  View,
+  Dimensions
 } from 'react-native';
 import Ftext from './Ftext';
+
+const screenWidth = Dimensions.get('window').width;
 
 export default function ButtonRound(props) {
   return (
@@ -12,13 +15,7 @@ export default function ButtonRound(props) {
       style={styles.touchWrapperCreateNewMap}
       onPress={props.handlePress}
     >
-      <View style={[
-        styles.createNewMap,
-        {
-          height:0.14*props.width,
-          width:0.14*props.width
-        }
-      ]}>
+      <View style={styles.createNewMap}>
         <Ftext size={30}>{props.text}</Ftext>
       </View>
     </TouchableHighlight>
@@ -30,6 +27,8 @@ const styles = StyleSheet.create({
     backgroundColor:'#5CAB7D',
     alignItems:'center',
     justifyContent:'center',
+    height:0.14*screenWidth,
+    width:0.14*screenWidth
   },
   touchWrapperCreateNewMap: {
     position:'absolute',

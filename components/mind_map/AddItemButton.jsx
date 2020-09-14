@@ -1,6 +1,13 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View } from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  View,
+  Dimensions
+ } from 'react-native';
 import Ftext from '../common_components/Ftext';
+
+const screenWidth = Dimensions.get('window').width;
 
 export default function AddItemButton(props) {
   return (
@@ -12,12 +19,7 @@ export default function AddItemButton(props) {
         left:20,
         right:20
       }}
-      style={{
-          width: 0.09*props.width,
-          height: 0.09*props.width,
-          justifyContent:'center',
-          alignItems:'center'
-        }}
+      style={styles.touchableWrapper}
       onPress={
         () => {
           props.setShowCreateNote({
@@ -43,5 +45,11 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     borderRadius: 50,
+  },
+  touchableWrapper: {
+    width: 0.09*screenWidth,
+    height: 0.09*screenWidth,
+    justifyContent:'center',
+    alignItems:'center'
   }
 });

@@ -3,8 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet,
   Text,
-  View,
-  useWindowDimensions
+  View
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Home from './components/home/Home';
@@ -16,7 +15,6 @@ export default function App() {
   const [showHome,setShowHome] = useState(true);
   const [showMap,setShowMap] = useState(false);
   const [showCreateNote,setShowCreateNote] = useState(false);
-  const width = useWindowDimensions().width;
 
   const getMyObject = async () => {
     try {
@@ -57,7 +55,6 @@ export default function App() {
           allMaps={operatingValue}
           setShowCreateNote={() => setShowCreateNote({entryType:'newmap'})}
           setShowMap={(note) => setShowMap(note)}
-          width={width}
         />
       }
       {
@@ -67,7 +64,6 @@ export default function App() {
           setShowCreateNote={(type) => setShowCreateNote(type)}
           note={showMap}
           operatingValue={operatingValue}
-          width={width}
         />
       }
       {
@@ -79,7 +75,6 @@ export default function App() {
           setShowCreateNote={setShowCreateNote}
           setObjectValue={setObjectValue}
           operatingValue={operatingValue}
-          width={width}
         />
       }
     </View>

@@ -5,7 +5,8 @@ import {
   TouchableHighlight,
   StyleSheet,
   View,
-  BackHandler
+  BackHandler,
+  Dimensions
 } from 'react-native';
 import Ftext from '../common_components/Ftext';
 import ButtonRound from '../common_components/ButtonRound';
@@ -13,6 +14,8 @@ import NoteEditArea from './NoteEditArea';
 import ChooseColorArea from './ChooseColorArea';
 import funx from '../../functions';
 import animx from '../../animations';
+
+const screenWidth = Dimensions.get('window').width;
 
 export default function CreateNote(props) {
   const [activeBtn,setActiveBtn] = useState('note');
@@ -80,12 +83,7 @@ export default function CreateNote(props) {
       opacity:fadeAnim,
       top:swipeAnim
     }}>
-      <View style={[
-        styles.tabsHeader,
-        {
-          height: 0.25*props.width
-        }
-      ]}>
+      <View style={styles.tabsHeader}>
         <TouchableHighlight style={styles.touchWrapperTabs} onPress={() => setActiveBtn('note')}>
           <View style={{...styles.tab,backgroundColor: activeBtn === 'note' ? '#5CAB7D' : '#DDD'}}>
             <Ftext color={activeBtn === 'note' ? '#FFF' : '#5CAB7D'}>NOTE</Ftext>
@@ -103,18 +101,15 @@ export default function CreateNote(props) {
           onChangeNote={onChangeNote}
           descValue={descValue}
           onChangeDesc={onChangeDesc}
-          width={props.width}
         /> :
         <ChooseColorArea
           currentColor={currentColor}
           setCurrentColor={setCurrentColor}
-          width={props.width}
         />
       }
       <ButtonRound
         text='✓'
         handlePress={() => saveNote()}
-        width={props.width}
       />
     </Animated.View>
   );
@@ -133,6 +128,7 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'flex-end',
     justifyContent:'space-around',
+    height: 0.25*screenWidth
   },
   tab: {
     backgroundColor:'#DDD',

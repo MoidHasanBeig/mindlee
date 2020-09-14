@@ -3,11 +3,14 @@ import {
   TouchableHighlight,
   View,
   TextInput,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native';
 import Noteball from '../common_components/Noteball';
 import colors from './colors';
 import funx from '../../functions';
+
+const screenWidth = Dimensions.get('window').width;
 
 export default function ChooseColorArea(props) {
 
@@ -21,7 +24,10 @@ export default function ChooseColorArea(props) {
           {
             colors.map((color,index) => {
               return (
-                <View key={funx.uniqueId(index)} style={{padding:0.04 * props.width}}>
+                <View
+                  key={funx.uniqueId(index)}
+                  style={{padding:0.04 * screenWidth}}
+                >
                   <TouchableHighlight
                     style={{borderRadius:50}}
                     onPress={() => props.setCurrentColor(color)}

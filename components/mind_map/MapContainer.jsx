@@ -4,16 +4,17 @@ import {
   StyleSheet,
   Animated,
   PanResponder,
-  useWindowDimensions
+  Dimensions
 } from 'react-native';
 import AddItemButton from './AddItemButton';
 import Noteball from '../common_components/Noteball';
 import funx from '../../functions';
 import animx from '../../animations';
 
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+
 export default function MapContainer(props) {
-  const width = useWindowDimensions().width;
-  const height = useWindowDimensions().height;
   const angle = useRef(new Animated.Value(0)).current;
   const initialAngle = useRef(new Animated.Value(0)).current;
   const commonAngle = 360/props.note.subdata.length;
@@ -44,8 +45,8 @@ export default function MapContainer(props) {
         let theta = funx.touchAngle(
           evt.nativeEvent.pageX,
           evt.nativeEvent.pageY,
-          width,
-          height,
+          screenWidth,
+          screenHeight,
           0
         );
         initialAngle.setValue(theta);
@@ -54,15 +55,15 @@ export default function MapContainer(props) {
           let theta = funx.touchAngle(
             evt.nativeEvent.pageX,
             evt.nativeEvent.pageY,
-            width,
-            height,
+            screenWidth,
+            screenHeight,
             initialAngle._value
           );
           angle.setValue(theta);
       },
       onPanResponderRelease: (evt, {vx, vy}) => {
-        let xPos = Math.sign(evt.nativeEvent.pageX-width/2);
-        let yPos = Math.sign(evt.nativeEvent.pageY-height/2);
+        let xPos = Math.sign(evt.nativeEvent.pageX-screenWidth/2);
+        let yPos = Math.sign(evt.nativeEvent.pageY-screenHeight/2);
         let velocity = (xPos*vy-yPos*vx)*0.4;
         Animated.decay(angle,{
             velocity: velocity,
@@ -82,68 +83,49 @@ export default function MapContainer(props) {
   ).current;
 
   return (
-    <View style={[
-      styles.mapContainer,
-      {
-        width: 0.9*props.width,
-        height: 0.9*props.width,
-        borderRadius: 0.45*props.width,
-        transform:[
-          { translateX: -0.45*props.width },
-          { translateY: -0.45*props.width },
-        ]
-      }
-    ]}
-    {...panResponder.panHandlers}
+    <View
+      style={styles.mapContainer}
+      {...panResponder.panHandlers}
     >
       <Animated.View style={[
-        styles.circularBorder,
-        {
-          width: 0.6*props.width,
-          height: 0.6*props.width,
-          borderRadius: 0.3*props.width,
-          opacity: fadeContainer,
-          transform:[
-            { translateX: -0.3*props.width },
-            { translateY: -0.3*props.width },
-            { scale: scaleContainer },
-          ]
-        }
-      ]} />
+          styles.circularBorder,
+          {
+            opacity: fadeContainer,
+            transform:[
+              { translateX: -0.3*screenWidth },
+              { translateY: -0.3*screenWidth },
+              { scale: scaleContainer }
+            ]
+          }
+        ]}
+      />
       {
         props.note.subdata.length === 0 &&
-          <View style={{
-            width:'100%',
-            height:'100%'
-          }}>
+          <View style={styles.fillParent}>
           {
             [1,2,3,4].map((item,index) => {
               return (
                 <Animated.View
                   key={index}
-                  style={
+                  style={[
+                    styles.centered,
                     {
-                      position:'absolute',
-                      top:'50%',
-                      left:'50%',
                       transform: [
-                        { translateX: -0.045*props.width},
-                        { translateY: -0.045*props.width},
+                        { translateX: -0.045*screenWidth},
+                        { translateY: -0.045*screenWidth},
                         { rotate: index*90+20+'deg' },
                         { rotate: spin },
-                        { translateX: 0.3*props.width},
+                        { translateX: 0.3*screenWidth},
                         { rotate: -1*(index*90+20)+'deg' },
                         { rotate: reverseSpin},
                       ]
                     }
-                  }
+                  ]}
                 >
                   <AddItemButton
                     index={0}
-                    setShowCreateNote={
-                      (entry) => props.setShowCreateNote(entry)
-                    }
-                    width={props.width}
+                    setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
+                    width={screenWidth}
                     parentId={props.note.id}
                   />
                 </Animated.View>
@@ -152,15 +134,10 @@ export default function MapContainer(props) {
           }
           </View>
       }
-      <View style={{
-        position:'absolute',
-        top:'50%',
-        left:'50%',
-        transform:[
-          { translateX: -12.5*props.width/100 },
-          { translateY: -12.5*props.width/100 }
-        ]
-      }}>
+      <View style={[
+        styles.mainNoteball,
+        styles.centered
+      ]}>
         <Noteball
           onPress={() => funx.editNote()}
           text={props.note.title}
@@ -172,65 +149,55 @@ export default function MapContainer(props) {
             return (
               <View
                 key={funx.uniqueId(index)}
-                style={{
-                  position:'absolute',
-                  height:'100%',
-                  width:'100%'
-                }}
+                style={styles.fillParent}
               >
                 <Animated.View
-                  style={{
-                    position:'absolute',
-                    top:'50%',
-                    left:'50%',
-                    transform:[
-                      { translateX: -0.1*props.width },
-                      { translateY: -0.1*props.width },
-                      { rotate: index*commonAngle+'deg'},
-                      { rotate: spin },
-                      { translateX: 0.3*props.width},
-                      { rotate: '-'+index*commonAngle+'deg'},
-                      { rotate: reverseSpin }
-                    ]
-                  }}
+                  style={[
+                    styles.centered,
+                    {
+                      transform:[
+                        { translateX: -0.1*screenWidth },
+                        { translateY: -0.1*screenWidth },
+                        { rotate: index*commonAngle+'deg'},
+                        { rotate: spin },
+                        { translateX: 0.3*screenWidth},
+                        { rotate: '-'+index*commonAngle+'deg'},
+                        { rotate: reverseSpin }
+                      ]
+                    }
+                  ]}
                 >
                   <Noteball
                     onPress={() =>
                       animx.mindmapTransitions(
                         mapAnimConfig,
-                        funx.mapTraverse(
-                          item,
-                          "in",
-                          props.setShowMap,
-                          props.operatingValue
-                        )
-                      )}
+                        funx.mapTraverse(item,"in",props.setShowMap,props.operatingValue
+                      )
+                    )}
                     text={props.operatingValue[item].title}
                     size={20}
                   />
                 </Animated.View>
                 <Animated.View
-                  style={
+                  style={[
+                    styles.centered,
                     {
-                      position:'absolute',
-                      top:'50%',
-                      left:'50%',
                       transform: [
-                        { translateX: -0.045*props.width },
-                        { translateY: -0.045*props.width },
+                        { translateX: -0.045*screenWidth },
+                        { translateY: -0.045*screenWidth },
                         { rotate: index*commonAngle+offsetAngle+'deg' },
                         { rotate: spin },
-                        { translateX: 0.3*props.width },
+                        { translateX: 0.3*screenWidth },
                         { rotate: -1*(index*commonAngle+offsetAngle)+'deg' },
                         { rotate: reverseSpin }
                       ]
                     }
-                  }
+                  ]}
                 >
                   <AddItemButton
                     index={index}
                     setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
-                    width={props.width}
+                    width={screenWidth}
                     parentId={props.note.id}
                   />
                 </Animated.View>
@@ -248,12 +215,38 @@ const styles = StyleSheet.create({
     top:'50%',
     left:'50%',
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+    width: 0.9*screenWidth,
+    height: 0.9*screenWidth,
+    borderRadius: 0.45*screenWidth,
+    transform:[
+      { translateX: -0.45*screenWidth },
+      { translateY: -0.45*screenWidth },
+    ]
   },
   circularBorder: {
     position:'absolute',
     borderWidth:1,
     borderColor:'#DDD',
+    top:'50%',
+    left:'50%',
+    width: 0.6*screenWidth,
+    height: 0.6*screenWidth,
+    borderRadius: 0.3*screenWidth,
+  },
+  mainNoteball: {
+    transform:[
+      { translateX: -12.5*screenWidth/100 },
+      { translateY: -12.5*screenWidth/100 }
+    ]
+  },
+  fillParent: {
+    position:'absolute',
+    width:'100%',
+    height:'100%'
+  },
+  centered: {
+    position:'absolute',
     top:'50%',
     left:'50%'
   }

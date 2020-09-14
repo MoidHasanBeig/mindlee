@@ -1,21 +1,21 @@
 import React from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Dimensions
+ } from 'react-native';
+
+ const screenWidth = Dimensions.get('window').width;
 
 export default function NoteEditArea(props) {
-
   return (
     <View style={styles.noteEditArea}>
       <TextInput
         value={props.noteValue}
         placeholder='Add a short note here'
         onChangeText={text => props.onChangeNote(text)}
-        style={[
-          styles.noteInputBox,
-          {
-            flex:1,
-            fontSize:0.04*props.width,
-          }
-        ]}
+        style={[styles.noteInputBox,{flex:1}]}
       />
       <TextInput
         value={props.descValue}
@@ -28,8 +28,7 @@ export default function NoteEditArea(props) {
           {
             flex:12,
             marginTop:0,
-            paddingTop:20,
-            fontSize:0.04*props.width
+            paddingTop:20
           }
         ]}
       />
@@ -48,6 +47,7 @@ const styles = StyleSheet.create({
     padding:5,
     paddingLeft:15,
     borderRadius:10,
-    fontFamily:'monospace'
+    fontFamily:'monospace',
+    fontSize:0.04*screenWidth
   }
 });

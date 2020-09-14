@@ -44,13 +44,11 @@ export default function MindMap(props) {
     }}>
       <ImageBackground source={image} style={styles.image}>
         <GoBack
-          width={props.width}
           traverse={() => backAction()}
           id={props.note.parent}
         />
         <MapContainer
           note={props.note}
-          width={props.width}
           setShowMap={(note) => props.setShowMap(note)}
           setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
           operatingValue={props.operatingValue}
