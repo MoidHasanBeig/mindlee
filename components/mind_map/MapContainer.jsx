@@ -27,15 +27,28 @@ export default function MapContainer(props) {
     inputRange:[0,360],
     outputRange:['-0deg','-360deg']
   });
-  //for transition snimations
-  const scaleContainer = useRef(new Animated.Value(1)).current;
-  const fadeContainer = useRef(new Animated.Value(1)).current;
-  const mapAnimConfig = {
-    scaleContainer,
-    fadeContainer,
-    scaleContainerVal:2,
-    fadeContainerVal:0
-  }
+
+  //for transition animations
+  const scaleContainer = props.mapTransitionAnim.interpolate({
+    inputRange:[0,2],
+    outputRange:[0,2]
+  });
+  const fadeContainer = props.mapTransitionAnim.interpolate({
+    inputRange:[0,1,2],
+    outputRange:[0,1,0]
+  });
+  const swayContainer = props.mapTransitionAnim.interpolate({
+    inputRange:[0,2],
+    outputRange: [0,0]
+  });
+  const mainNoteballTranslateX = props.mapTransitionAnim.interpolate({
+    inputRange:[0,1,2],
+    outputRange:[0,0,-screenWidth/1.5]
+  });
+  const mainNoteballTranslateY = props.mapTransitionAnim.interpolate({
+    inputRange:[0,1,2],
+    outputRange:[0,0,-screenHeight/1.5]
+  });
 
   const panResponder = useRef(
     PanResponder.create({
@@ -62,29 +75,39 @@ export default function MapContainer(props) {
           angle.setValue(theta);
       },
       onPanResponderRelease: (evt, {vx, vy}) => {
-        let xPos = Math.sign(evt.nativeEvent.pageX-screenWidth/2);
-        let yPos = Math.sign(evt.nativeEvent.pageY-screenHeight/2);
-        let velocity = (xPos*vy-yPos*vx)*0.4;
-        Animated.decay(angle,{
-            velocity: velocity,
-            deceleration: 0.997,
-            useNativeDriver: false
-          }
-        ).start(() => {
-          angle.flattenOffset();
-          while (angle._value>=360) {
-            angle.setValue(angle._value-360);
-          }
-          angle.setOffset(angle._value);
-          angle.setValue(0);
-        });
+        // let xPos = Math.sign(evt.nativeEvent.pageX-screenWidth/2);
+        // let yPos = Math.sign(evt.nativeEvent.pageY-screenHeight/2);
+        // let velocity = (xPos*vy-yPos*vx)*0.4;
+        // Animated.decay(angle,{
+        //     velocity: velocity,
+        //     deceleration: 0.997,
+        //     useNativeDriver: false
+        //   }
+        // ).start(() => {
+        // });
+        angle.flattenOffset();
+        while (angle._value>=360) {
+          angle.setValue(angle._value-360);
+        }
+        angle.setOffset(angle._value);
+        angle.setValue(0);
       }
     })
   ).current;
 
   return (
-    <View
-      style={styles.mapContainer}
+    <Animated.View
+      style={[
+        styles.mapContainer,
+        {
+          transform:[
+            { translateX: -0.45*screenWidth },
+            { translateY: -0.45*screenWidth },
+            { translateX: swayContainer },
+            { translateY: swayContainer }
+          ]
+        }
+      ]}
       {...panResponder.panHandlers}
     >
       <Animated.View style={[
@@ -118,7 +141,8 @@ export default function MapContainer(props) {
                         { translateX: 0.3*screenWidth},
                         { rotate: -1*(index*90+20)+'deg' },
                         { rotate: reverseSpin},
-                      ]
+                      ],
+                      opacity: fadeContainer
                     }
                   ]}
                 >
@@ -134,16 +158,24 @@ export default function MapContainer(props) {
           }
           </View>
       }
-      <View style={[
+      <Animated.View style={[
         styles.mainNoteball,
-        styles.centered
+        styles.centered,
+        {
+          transform:[
+            { translateX: -12.5*screenWidth/100 },
+            { translateY: -12.5*screenWidth/100 },
+            { translateX: mainNoteballTranslateX },
+            { translateY: mainNoteballTranslateY }
+          ]
+        }
       ]}>
         <Noteball
           onPress={() => funx.editNote()}
           text={props.note.title}
           size={25}
         />
-      </View>
+      </Animated.View>
         {
           props.note.subdata.map((item,index) => {
             return (
@@ -163,17 +195,23 @@ export default function MapContainer(props) {
                         { translateX: 0.3*screenWidth},
                         { rotate: '-'+index*commonAngle+'deg'},
                         { rotate: reverseSpin }
-                      ]
+                      ],
+                      opacity: fadeContainer
                     }
                   ]}
                 >
                   <Noteball
                     onPress={() =>
                       animx.mindmapTransitions(
-                        mapAnimConfig,
-                        funx.mapTraverse(item,"in",props.setShowMap,props.operatingValue
-                      )
-                    )}
+                        {
+                          mapTransitionAnim:props.mapTransitionAnim,
+                          transVal:2,
+                          finalVal:1
+                        },
+                        () => {
+                          funx.mapTraverse(item,props.setShowMap,props.operatingValue)
+                        })
+                      }
                     text={props.operatingValue[item].title}
                     size={20}
                   />
@@ -190,7 +228,8 @@ export default function MapContainer(props) {
                         { translateX: 0.3*screenWidth },
                         { rotate: -1*(index*commonAngle+offsetAngle)+'deg' },
                         { rotate: reverseSpin }
-                      ]
+                      ],
+                      opacity: fadeContainer
                     }
                   ]}
                 >
@@ -205,7 +244,7 @@ export default function MapContainer(props) {
             )
           })
         }
-    </View>
+    </Animated.View>
   );
 }
 
@@ -218,11 +257,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     width: 0.9*screenWidth,
     height: 0.9*screenWidth,
-    borderRadius: 0.45*screenWidth,
-    transform:[
-      { translateX: -0.45*screenWidth },
-      { translateY: -0.45*screenWidth },
-    ]
+    borderRadius: 0.45*screenWidth
   },
   circularBorder: {
     position:'absolute',
@@ -235,10 +270,6 @@ const styles = StyleSheet.create({
     borderRadius: 0.3*screenWidth,
   },
   mainNoteball: {
-    transform:[
-      { translateX: -12.5*screenWidth/100 },
-      { translateY: -12.5*screenWidth/100 }
-    ]
   },
   fillParent: {
     position:'absolute',

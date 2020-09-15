@@ -26,7 +26,7 @@ const myFunctions = (() => {
   }
 
   //traverse map
-  function mapTraverse(id,direction,setShowMap,operatingValue) {
+  function mapTraverse(id,setShowMap,operatingValue) {
     setShowMap(operatingValue[id]);
   }
 

@@ -24,33 +24,30 @@ const myAnimations = (() => {
   //for map elements animation
   function mindmapTransitions(mapAnimConfig,callback) {
     let {
-      scaleContainer,
-      fadeContainer,
-      scaleContainerVal,
-      fadeContainerVal
+      mapTransitionAnim,
+      transVal,
+      finalVal
     } = mapAnimConfig;
 
-    const scaling = Animated.timing(
-      scaleContainer,
+    Animated.timing(
+      mapTransitionAnim,
       {
-        toValue:scaleContainerVal,
-        duration:400,
+        toValue:transVal,
+        duration:350,
         useNativeDriver:true
       }
-    );
-    const fading = Animated.timing(
-      fadeContainer,
-      {
-        toValue:fadeContainerVal,
-        duration:450,
-        useNativeDriver:true
-      }
-    );
-    Animated.parallel([
-      scaling,
-      fading
-    ]).start(callback);
-  }
+    ).start(() => {
+      callback();
+      Animated.timing(
+        mapTransitionAnim,
+        {
+          toValue:finalVal,
+          duration:250,
+          useNativeDriver:true
+        }
+      ).start();
+    });
+}
 
   const animx = {
     navigateScreenAnim,
