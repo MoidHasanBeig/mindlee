@@ -21,24 +21,34 @@ const screenHeight = Dimensions.get('window').height;
 export default function MindMap(props) {
   const swipeAnim = useRef(new Animated.Value(500)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const mapTransitionAnim = useRef(new Animated.Value(1)).current;
+  const mapTransitionAnim_1 = useRef(new Animated.Value(1)).current;
+  const mapTransitionAnim_2 = useRef(new Animated.Value(1)).current;
+  const mapTransitionAnim_3 = useRef(new Animated.Value(1)).current;
+  const mapTransitionAnim_4 = useRef(new Animated.Value(1)).current;
+  const {
+    navigateScreenAnim,
+    mindmapTransitions,
+    interpolation
+  } = animx;
 
-  const goBackTranslateX = mapTransitionAnim.interpolate({
-    inputRange:[0,1,2],
-    outputRange:[screenWidth/2,0,-screenWidth/2]
-  });
-  const goBackTranslateY = mapTransitionAnim.interpolate({
-    inputRange:[0,1,2],
-    outputRange:[screenHeight/2,0,-screenHeight/2]
-  });
+  const xdist = 0.50*screenWidth;
+  const ydist = 0.50*screenHeight;
+
+  const goBackTranslateX = interpolation(mapTransitionAnim_2,[0,1,2],[xdist,0,-xdist*0.7]);
+  const goBackTranslateY = interpolation(mapTransitionAnim_2,[0,1,2],[ydist,0,-ydist*0.7]);
+  const goBackScale = interpolation(mapTransitionAnim_3,[0,1,2],[0.25,1,1]);
 
   function backAction() {
-    if (props.note.parent === 'home') animx.navigateScreenAnim(swipeAnim,500,fadeAnim,0,() => props.setShowMap(false));
+    if (props.note.parent === 'home') navigateScreenAnim(swipeAnim,500,fadeAnim,0,() => props.setShowMap(false));
     else {
-      animx.mindmapTransitions(
+      mindmapTransitions(
         {
-          mapTransitionAnim,
+          mapTransitionAnim_1,
+          mapTransitionAnim_2,
+          mapTransitionAnim_3,
+          mapTransitionAnim_4,
           transVal:0,
+          intermediateVal:2,
           finalVal:1
         },
         () => {
@@ -49,7 +59,7 @@ export default function MindMap(props) {
   }
 
   useEffect(() => {
-    animx.navigateScreenAnim(swipeAnim,0,fadeAnim,1);
+    navigateScreenAnim(swipeAnim,0,fadeAnim,1);
   });
 
   useEffect(() => {
@@ -63,7 +73,9 @@ export default function MindMap(props) {
     <Animated.View style={{
       ...styles.mindMap,
       opacity:fadeAnim,
-      top:swipeAnim
+      transform:[
+        { translateY:swipeAnim }
+      ]
     }}>
       <ImageBackground source={image} style={styles.image}>
         <Animated.View style={{
@@ -71,11 +83,14 @@ export default function MindMap(props) {
           top:0,
           left:0,
           transform:[
+            { translateX: -0.35*screenWidth },
+            { translateY: -0.35*screenWidth },
             { translateX: goBackTranslateX },
-            { translateY: goBackTranslateY }
+            { translateY: goBackTranslateY },
+            { scale: goBackScale }
           ],
-          height:0.5*screenWidth,
-          width:0.5*screenWidth
+          height:0.7*screenWidth,
+          width:0.7*screenWidth
         }}>
           <GoBack
           traverse={() => backAction()}
@@ -87,7 +102,10 @@ export default function MindMap(props) {
           setShowMap={(note) => props.setShowMap(note)}
           setShowCreateNote={(entry) => props.setShowCreateNote(entry)}
           operatingValue={props.operatingValue}
-          mapTransitionAnim={mapTransitionAnim}
+          mapTransitionAnim_1={mapTransitionAnim_1}
+          mapTransitionAnim_2={mapTransitionAnim_2}
+          mapTransitionAnim_3={mapTransitionAnim_3}
+          mapTransitionAnim_4={mapTransitionAnim_4}
         />
       </ImageBackground>
     </Animated.View>
@@ -97,6 +115,7 @@ export default function MindMap(props) {
 const styles = StyleSheet.create({
   mindMap: {
     position:'absolute',
+    top:0,
     left:0,
     width:'100%',
     height:'100%',

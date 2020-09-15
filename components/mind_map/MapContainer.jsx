@@ -19,36 +19,23 @@ export default function MapContainer(props) {
   const initialAngle = useRef(new Animated.Value(0)).current;
   const commonAngle = 360/props.note.subdata.length;
   const offsetAngle = commonAngle/2;
-  const spin = angle.interpolate({
-    inputRange:[0,360],
-    outputRange:['0deg','360deg']
-  });
-  const reverseSpin = angle.interpolate({
-    inputRange:[0,360],
-    outputRange:['-0deg','-360deg']
-  });
+  const {
+    navigateScreenAnim,
+    mindmapTransitions,
+    interpolation
+  } = animx;
 
-  //for transition animations
-  const scaleContainer = props.mapTransitionAnim.interpolate({
-    inputRange:[0,2],
-    outputRange:[0,2]
-  });
-  const fadeContainer = props.mapTransitionAnim.interpolate({
-    inputRange:[0,1,2],
-    outputRange:[0,1,0]
-  });
-  const swayContainer = props.mapTransitionAnim.interpolate({
-    inputRange:[0,2],
-    outputRange: [0,0]
-  });
-  const mainNoteballTranslateX = props.mapTransitionAnim.interpolate({
-    inputRange:[0,1,2],
-    outputRange:[0,0,-screenWidth/1.5]
-  });
-  const mainNoteballTranslateY = props.mapTransitionAnim.interpolate({
-    inputRange:[0,1,2],
-    outputRange:[0,0,-screenHeight/1.5]
-  });
+  const spin = interpolation(angle,[0,360],['0deg','360deg']);
+  const reverseSpin = interpolation(angle,[0,360],['-0deg','-360deg']);
+
+  const scaleContainer = interpolation(props.mapTransitionAnim_1,[0,2],[0,2]);
+  const fadeContainer = interpolation(props.mapTransitionAnim_1,[0,1,2],[0,1,0]);
+  const swayContainer = interpolation(props.mapTransitionAnim_1,[0,2],[0,0]);
+  const mainNoteballTranslateX = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,0,-screenWidth/2]);
+  const mainNoteballTranslateY = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,0,-screenHeight/2]);
+  const mainNoteballScale = interpolation(props.mapTransitionAnim_3,[0,1,2],[1,1,2.8]);
+  const mainNoteballOpacity = interpolation(props.mapTransitionAnim_4,[0,1,2],[0,1,1]);
+
 
   const panResponder = useRef(
     PanResponder.create({
@@ -75,16 +62,6 @@ export default function MapContainer(props) {
           angle.setValue(theta);
       },
       onPanResponderRelease: (evt, {vx, vy}) => {
-        // let xPos = Math.sign(evt.nativeEvent.pageX-screenWidth/2);
-        // let yPos = Math.sign(evt.nativeEvent.pageY-screenHeight/2);
-        // let velocity = (xPos*vy-yPos*vx)*0.4;
-        // Animated.decay(angle,{
-        //     velocity: velocity,
-        //     deceleration: 0.997,
-        //     useNativeDriver: false
-        //   }
-        // ).start(() => {
-        // });
         angle.flattenOffset();
         while (angle._value>=360) {
           angle.setValue(angle._value-360);
@@ -101,8 +78,8 @@ export default function MapContainer(props) {
         styles.mapContainer,
         {
           transform:[
-            { translateX: -0.45*screenWidth },
-            { translateY: -0.45*screenWidth },
+            { translateX: 0.5*screenWidth-0.45*screenWidth },
+            { translateY: 0.5*screenHeight-0.45*screenWidth },
             { translateX: swayContainer },
             { translateY: swayContainer }
           ]
@@ -166,8 +143,10 @@ export default function MapContainer(props) {
             { translateX: -12.5*screenWidth/100 },
             { translateY: -12.5*screenWidth/100 },
             { translateX: mainNoteballTranslateX },
-            { translateY: mainNoteballTranslateY }
-          ]
+            { translateY: mainNoteballTranslateY },
+            { scale: mainNoteballScale }
+          ],
+          opacity:mainNoteballOpacity
         }
       ]}>
         <Noteball
@@ -202,10 +181,14 @@ export default function MapContainer(props) {
                 >
                   <Noteball
                     onPress={() =>
-                      animx.mindmapTransitions(
+                      mindmapTransitions(
                         {
-                          mapTransitionAnim:props.mapTransitionAnim,
+                          mapTransitionAnim_1:props.mapTransitionAnim_1,
+                          mapTransitionAnim_2:props.mapTransitionAnim_2,
+                          mapTransitionAnim_3:props.mapTransitionAnim_3,
+                          mapTransitionAnim_4:props.mapTransitionAnim_4,
                           transVal:2,
+                          intermediateVal:1,
                           finalVal:1
                         },
                         () => {
@@ -251,8 +234,8 @@ export default function MapContainer(props) {
 const styles = StyleSheet.create({
   mapContainer: {
     position:'absolute',
-    top:'50%',
-    left:'50%',
+    top:0,
+    left:0,
     justifyContent:'center',
     alignItems:'center',
     width: 0.9*screenWidth,

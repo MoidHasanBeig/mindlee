@@ -29,13 +29,9 @@ const styles = StyleSheet.create({
     top:0,
     left:0,
     overflow:'hidden',
-    height:0.5*screenWidth,
-    width:0.5*screenWidth,
-    borderRadius:0.25*screenWidth,
-    transform: [
-      { translateX: -0.2*screenWidth },
-      { translateY: -0.2*screenWidth },
-    ]
+    height:'100%',
+    width:'100%',
+    borderRadius:0.35*screenWidth,
   },
   goBack: {
     backgroundColor:'#5CAB7D',

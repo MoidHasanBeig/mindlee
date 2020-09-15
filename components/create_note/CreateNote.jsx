@@ -81,7 +81,9 @@ export default function CreateNote(props) {
     <Animated.View style={{
       ...styles.createNote,
       opacity:fadeAnim,
-      top:swipeAnim
+      transform:[
+        { translateY:swipeAnim}
+      ]
     }}>
       <View style={styles.tabsHeader}>
         <TouchableHighlight style={styles.touchWrapperTabs} onPress={() => setActiveBtn('note')}>
@@ -120,6 +122,7 @@ const styles = StyleSheet.create({
     height:'100%',
     width:'100%',
     position:'absolute',
+    top:0,
     left:0,
     elevation:5,
     backgroundColor:'#FFF'

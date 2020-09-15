@@ -79,3 +79,15 @@ Gesture system for rotating mindmap:
 (1,-1) vx,vy -vx,vy vx,-vy -vx,-vy
 (-1,-1) vx,vy -vx,vy vx,-vy -vx,-vy
 (-1,1) vx,vy -vx,vy vx,-vy -vx,-vy
+
+decay
+// let xPos = Math.sign(evt.nativeEvent.pageX-screenWidth/2);
+// let yPos = Math.sign(evt.nativeEvent.pageY-screenHeight/2);
+// let velocity = (xPos*vy-yPos*vx)*0.4;
+// Animated.decay(angle,{
+//     velocity: velocity,
+//     deceleration: 0.997,
+//     useNativeDriver: false
+//   }
+// ).start(() => {
+// });
