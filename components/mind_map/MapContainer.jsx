@@ -17,6 +17,7 @@ const screenHeight = Dimensions.get('window').height;
 export default function MapContainer(props) {
   const angle = useRef(new Animated.Value(0)).current;
   const initialAngle = useRef(new Animated.Value(0)).current;
+  const psuedoAngle = useRef(new Animated.Value(0)).current;
   const commonAngle = 360/props.note.subdata.length;
   const offsetAngle = commonAngle/2;
   const {
@@ -60,14 +61,34 @@ export default function MapContainer(props) {
             initialAngle._value
           );
           angle.setValue(theta);
+          psuedoAngle.setValue(theta);
       },
       onPanResponderRelease: (evt, {vx, vy}) => {
-        angle.flattenOffset();
-        while (angle._value>=360) {
-          angle.setValue(angle._value-360);
-        }
-        angle.setOffset(angle._value);
-        angle.setValue(0);
+        let xPos = Math.sign(evt.nativeEvent.pageX-screenWidth/2);
+        let yPos = Math.sign(evt.nativeEvent.pageY-screenHeight/2);
+        let velocity = (xPos*vy-yPos*vx)*0.4;
+        const decay1 = Animated.decay(angle,{
+            velocity: velocity,
+            deceleration: 0.997,
+            useNativeDriver: true
+          }
+        );
+        const decay2 = Animated.decay(psuedoAngle,{
+            velocity: velocity,
+            deceleration: 0.997,
+            useNativeDriver: false
+          }
+        );
+        Animated.parallel([decay1,decay2]).start(() => {
+          psuedoAngle.flattenOffset();
+          while (psuedoAngle._value>=360) {
+            psuedoAngle.setValue(psuedoAngle._value-360);
+          }
+          angle.setOffset(psuedoAngle._value);
+          psuedoAngle.setOffset(psuedoAngle._value);
+          angle.setValue(0);
+          psuedoAngle.setValue(0);
+        });
       }
     })
   ).current;
