@@ -6,7 +6,8 @@ import {
   StyleSheet,
   View,
   BackHandler,
-  Dimensions
+  Dimensions,
+  ImageBackground
 } from 'react-native';
 import Ftext from '../common_components/Ftext';
 import ButtonRound from '../common_components/ButtonRound';
@@ -16,6 +17,7 @@ import funx from '../../functions';
 import animx from '../../animations';
 
 const screenWidth = Dimensions.get('window').width;
+const image = require('../assets/bg.png');
 
 export default function CreateNote(props) {
   const [activeBtn,setActiveBtn] = useState('note');
@@ -85,34 +87,36 @@ export default function CreateNote(props) {
         { translateY:swipeAnim}
       ]
     }}>
-      <View style={styles.tabsHeader}>
-        <TouchableHighlight style={styles.touchWrapperTabs} onPress={() => setActiveBtn('note')}>
-          <View style={{...styles.tab,backgroundColor: activeBtn === 'note' ? '#5CAB7D' : '#DDD'}}>
-            <Ftext color={activeBtn === 'note' ? '#FFF' : '#5CAB7D'}>NOTE</Ftext>
-          </View>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.touchWrapperTabs} onPress={() => setActiveBtn('color')}>
-          <View style={{...styles.tab,backgroundColor: activeBtn === 'color' ? '#5CAB7D' : '#DDD'}}>
-            <Ftext color={activeBtn === 'color' ? '#FFF' : '#5CAB7D'}>COLOR</Ftext>
-          </View>
-        </TouchableHighlight>
-      </View>
-      {activeBtn === 'note' ?
-        <NoteEditArea
-          noteValue={noteValue}
-          onChangeNote={onChangeNote}
-          descValue={descValue}
-          onChangeDesc={onChangeDesc}
-        /> :
-        <ChooseColorArea
-          currentColor={currentColor}
-          setCurrentColor={setCurrentColor}
+      <ImageBackground source={image} style={{width:'100%',height:'100%'}}>
+        <View style={styles.tabsHeader}>
+          <TouchableHighlight style={styles.touchWrapperTabs} onPress={() => setActiveBtn('note')}>
+            <View style={{...styles.tab,backgroundColor: activeBtn === 'note' ? '#5CAB7D' : '#DDD'}}>
+              <Ftext color={activeBtn === 'note' ? '#FFF' : '#5CAB7D'}>NOTE</Ftext>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.touchWrapperTabs} onPress={() => setActiveBtn('color')}>
+            <View style={{...styles.tab,backgroundColor: activeBtn === 'color' ? '#5CAB7D' : '#DDD'}}>
+              <Ftext color={activeBtn === 'color' ? '#FFF' : '#5CAB7D'}>COLOR</Ftext>
+            </View>
+          </TouchableHighlight>
+        </View>
+        {activeBtn === 'note' ?
+          <NoteEditArea
+            noteValue={noteValue}
+            onChangeNote={onChangeNote}
+            descValue={descValue}
+            onChangeDesc={onChangeDesc}
+          /> :
+          <ChooseColorArea
+            currentColor={currentColor}
+            setCurrentColor={setCurrentColor}
+          />
+        }
+        <ButtonRound
+          text='✓'
+          handlePress={() => saveNote()}
         />
-      }
-      <ButtonRound
-        text='✓'
-        handlePress={() => saveNote()}
-      />
+      </ImageBackground>
     </Animated.View>
   );
 }

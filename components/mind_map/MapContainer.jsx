@@ -1,4 +1,4 @@
-import React,{ useRef } from 'react';
+import React,{ useRef, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -15,6 +15,7 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function MapContainer(props) {
+  const [currentBall,setCurrentBall] = useState();
   const angle = useRef(new Animated.Value(0)).current;
   const initialAngle = useRef(new Animated.Value(0)).current;
   const psuedoAngle = useRef(new Animated.Value(0)).current;
@@ -32,11 +33,12 @@ export default function MapContainer(props) {
   const scaleContainer = interpolation(props.mapTransitionAnim_1,[0,2],[0,2]);
   const fadeContainer = interpolation(props.mapTransitionAnim_1,[0,1,2],[0,1,0]);
   const swayContainer = interpolation(props.mapTransitionAnim_1,[0,2],[0,0]);
-  const mainNoteballTranslateX = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,0,-screenWidth/2]);
-  const mainNoteballTranslateY = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,0,-screenHeight/2]);
-  const mainNoteballScale = interpolation(props.mapTransitionAnim_3,[0,1,2],[1,1,2.8]);
-  const mainNoteballOpacity = interpolation(props.mapTransitionAnim_4,[0,1,2],[0,1,1]);
-
+  const mainNoteballTranslateX = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,0,-0.5*screenWidth]);
+  const mainNoteballTranslateY = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,0,-0.5*screenHeight]);
+  const mainNoteballScale = interpolation(props.mapTransitionAnim_3,[0,1,2],[0.5,1,2.8]);
+  const mainNoteballOpacity = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,1,1]);
+  const subNoteballScale = interpolation(props.mapTransitionAnim_4,[0,1,2],[0.5,1,1.25]);
+  const subNoteballOpacity = interpolation(props.mapTransitionAnim_5,[0,1,2],[0,1,1]);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -66,7 +68,7 @@ export default function MapContainer(props) {
       onPanResponderRelease: (evt, {vx, vy}) => {
         let xPos = Math.sign(evt.nativeEvent.pageX-screenWidth/2);
         let yPos = Math.sign(evt.nativeEvent.pageY-screenHeight/2);
-        let velocity = (xPos*vy-yPos*vx)*0.4;
+        let velocity = (xPos*vy-yPos*vx)*0.6;
         const decay1 = Animated.decay(angle,{
             velocity: velocity,
             deceleration: 0.997,
@@ -194,30 +196,74 @@ export default function MapContainer(props) {
                         { rotate: spin },
                         { translateX: 0.3*screenWidth},
                         { rotate: '-'+index*commonAngle+'deg'},
-                        { rotate: reverseSpin }
-                      ],
-                      opacity: fadeContainer
-                    }
-                  ]}
+                        { translateX: interpolation(
+                            props.mapTransitionAnim_4,
+                            [0,1,2],
+                            [
+                              funx.translateDist(
+                                index*commonAngle,
+                                screenWidth,
+                                false,
+                                "x"
+                              ),
+                              0,
+                              funx.translateDist(
+                                index*commonAngle,
+                                screenWidth,
+                                currentBall === index,
+                                "x"
+                              )
+                            ])
+                          },
+                        { translateY: interpolation(
+                            props.mapTransitionAnim_4,
+                            [0,1,2],
+                            [
+                              funx.translateDist(
+                                index*commonAngle,
+                                screenHeight,
+                                false,
+                                "y"
+                              ),
+                              0,
+                              funx.translateDist(
+                                index*commonAngle,
+                                screenWidth,
+                                currentBall === index,
+                                "y"
+                              )
+                            ])
+                          },
+                          { scale: currentBall === index ? subNoteballScale : 1 }
+                        ]
+                      },
+                      { opacity: subNoteballOpacity }
+                    ]
+                  }
                 >
                   <Noteball
                     onPress={() =>
-                      mindmapTransitions(
-                        {
-                          mapTransitionAnim_1:props.mapTransitionAnim_1,
-                          mapTransitionAnim_2:props.mapTransitionAnim_2,
-                          mapTransitionAnim_3:props.mapTransitionAnim_3,
-                          mapTransitionAnim_4:props.mapTransitionAnim_4,
-                          transVal:2,
-                          intermediateVal:1,
-                          finalVal:1
-                        },
-                        () => {
-                          funx.mapTraverse(item,props.setShowMap,props.operatingValue)
-                        })
+                      {
+                        setCurrentBall(index);
+                        mindmapTransitions(
+                          {
+                            mapTransitionAnim_1:props.mapTransitionAnim_1,
+                            mapTransitionAnim_2:props.mapTransitionAnim_2,
+                            mapTransitionAnim_3:props.mapTransitionAnim_3,
+                            mapTransitionAnim_4:props.mapTransitionAnim_4,
+                            transVal:2,
+                            intermediateVal_1:0,
+                            intermediateVal_2:1,
+                            finalVal:1
+                          },
+                          () => {
+                            funx.mapTraverse(item,props.setShowMap,props.operatingValue)
+                          })
+                        }
                       }
                     text={props.operatingValue[item].title}
                     size={20}
+                    index={index}
                   />
                 </Animated.View>
                 <Animated.View

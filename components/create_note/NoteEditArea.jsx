@@ -28,7 +28,8 @@ export default function NoteEditArea(props) {
           {
             flex:12,
             marginTop:0,
-            paddingTop:20
+            paddingTop:20,
+            borderBottomRightRadius:100
           }
         ]}
       />
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
   noteInputBox: {
     borderWidth:1,
     borderColor:'#CCC',
+    backgroundColor:'#FFF',
     margin:20,
     padding:5,
     paddingLeft:15,

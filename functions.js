@@ -30,11 +30,23 @@ const myFunctions = (() => {
     setShowMap(operatingValue[id]);
   }
 
+  //translate value for sub note balls transition
+  function translateDist(commonAngle,radius,isCurrent=false,xy) {
+    let x = radius*Math.cos(commonAngle*Math.PI/180);
+    let y = radius*Math.sin(commonAngle*Math.PI/180);
+    if (isCurrent) {
+      x=x*-0.3;
+      y=y*-0.3;
+    }
+    return xy === "x" ? x : y;
+  }
+
   const funx = {
     uniqueId,
     touchAngle,
     editNote,
-    mapTraverse
+    mapTraverse,
+    translateDist
   }
   return funx;
 })();

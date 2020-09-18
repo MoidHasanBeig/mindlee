@@ -25,6 +25,7 @@ export default function MindMap(props) {
   const mapTransitionAnim_2 = useRef(new Animated.Value(1)).current;
   const mapTransitionAnim_3 = useRef(new Animated.Value(1)).current;
   const mapTransitionAnim_4 = useRef(new Animated.Value(1)).current;
+  const mapTransitionAnim_5 = useRef(new Animated.Value(1)).current;
   const {
     navigateScreenAnim,
     mindmapTransitions,
@@ -36,7 +37,7 @@ export default function MindMap(props) {
 
   const goBackTranslateX = interpolation(mapTransitionAnim_2,[0,1,2],[xdist,0,-xdist*0.7]);
   const goBackTranslateY = interpolation(mapTransitionAnim_2,[0,1,2],[ydist,0,-ydist*0.7]);
-  const goBackScale = interpolation(mapTransitionAnim_3,[0,1,2],[0.25,1,1]);
+  const goBackScale = interpolation(mapTransitionAnim_4,[0,1,2],[0.3572,1,1]);
 
   function backAction() {
     if (props.note.parent === 'home') navigateScreenAnim(swipeAnim,500,fadeAnim,0,() => props.setShowMap(false));
@@ -47,8 +48,10 @@ export default function MindMap(props) {
           mapTransitionAnim_2,
           mapTransitionAnim_3,
           mapTransitionAnim_4,
+          mapTransitionAnim_5,
           transVal:0,
-          intermediateVal:2,
+          intermediateVal_1:2,
+          intermediateVal_2:2,
           finalVal:1
         },
         () => {
@@ -106,6 +109,7 @@ export default function MindMap(props) {
           mapTransitionAnim_2={mapTransitionAnim_2}
           mapTransitionAnim_3={mapTransitionAnim_3}
           mapTransitionAnim_4={mapTransitionAnim_4}
+          mapTransitionAnim_5={mapTransitionAnim_5}
         />
       </ImageBackground>
     </Animated.View>

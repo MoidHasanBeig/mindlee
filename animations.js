@@ -9,12 +9,13 @@ const myAnimations = (() => {
     });
   }
 
-  function timingAnim(anim_val,toValue,duration) {
+  function timingAnim(anim_val,toValue,duration,delay=0) {
     return Animated.timing(
       anim_val,
       {
         toValue,
         duration,
+        delay,
         useNativeDriver:true
       }
     );
@@ -34,40 +35,26 @@ const myAnimations = (() => {
       mapTransitionAnim_3,
       mapTransitionAnim_4,
       transVal,
-      intermediateVal,
+      intermediateVal_1,
+      intermediateVal_2,
       finalVal
     } = mapAnimConfig;
 
-    callback();
-
-    // transition val 1
-    const sequence_1 = Animated.sequence([
-      timingAnim(mapTransitionAnim_1,transVal,250),
-      timingAnim(mapTransitionAnim_1,finalVal,150)
-    ]);
-    // transition val 2
-    const sequence_2 = Animated.sequence([
-      timingAnim(mapTransitionAnim_2,transVal,350),
-      timingAnim(mapTransitionAnim_2,intermediateVal,0),
-      timingAnim(mapTransitionAnim_2,finalVal,350)
-    ]);
-    //transition value 3
-    const sequence_3 = Animated.sequence([
-      timingAnim(mapTransitionAnim_3,transVal,350),
-      timingAnim(mapTransitionAnim_3,finalVal,0)
-    ]);
-    //transition value 4 : mainNoteballOpacity
-    const sequence_4 = Animated.sequence([
-      timingAnim(mapTransitionAnim_4,transVal,300),
-      timingAnim(mapTransitionAnim_4,finalVal,0)
-    ]);
-
     Animated.parallel([
-      sequence_1,
-      sequence_2,
-      sequence_3,
-      sequence_4
-    ]).start();
+      timingAnim(mapTransitionAnim_1,transVal,250),
+      timingAnim(mapTransitionAnim_2,transVal,350),
+      timingAnim(mapTransitionAnim_3,transVal,350),
+      timingAnim(mapTransitionAnim_4,transVal,350)
+    ]).start(() => {
+        mapTransitionAnim_1.setValue(intermediateVal_1);
+        mapTransitionAnim_2.setValue(intermediateVal_2);
+        callback();
+        timingAnim(mapTransitionAnim_1,finalVal,250).start();
+        timingAnim(mapTransitionAnim_2,finalVal,350).start();
+        timingAnim(mapTransitionAnim_3,finalVal,0).start();
+        timingAnim(mapTransitionAnim_4,finalVal,0,20).start();
+      }
+    );
 }
 
   const animx = {

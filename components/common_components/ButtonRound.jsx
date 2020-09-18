@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     backgroundColor:'#5CAB7D',
     alignItems:'center',
     justifyContent:'center',
-    height:0.14*screenWidth,
-    width:0.14*screenWidth
+    height:0.13*screenWidth,
+    width:0.13*screenWidth
   },
   touchWrapperCreateNewMap: {
     position:'absolute',
