@@ -109,7 +109,7 @@ export default function CreateNote(props) {
           /> :
           <ChooseColorArea
             currentColor={currentColor}
-            setCurrentColor={setCurrentColor}
+            setCurrentColor={(color) => setCurrentColor(color)}
           />
         }
         <ButtonRound

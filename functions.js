@@ -41,12 +41,23 @@ const myFunctions = (() => {
     return xy === "x" ? x : y;
   }
 
+  //slice circular array
+  function customSlice(isShifted,arr,start,end) {
+    if(!isShifted) return arr;
+    if(arr.length === 0) return [];
+    if(start<end) return arr.slice(start,end);
+    else {
+      return arr.slice(start,arr.length).concat(arr.slice(0,end));
+    }
+  }
+
   const funx = {
     uniqueId,
     touchAngle,
     editNote,
     mapTraverse,
-    translateDist
+    translateDist,
+    customSlice
   }
   return funx;
 })();

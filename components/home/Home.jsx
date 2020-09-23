@@ -25,7 +25,7 @@ export default function Home(props) {
         <View style={styles.selectMap}>
           <Noteball
             onPress={() => props.setShowMap(props.note)}
-            color={props.color}
+            color={props.note.color}
             text={props.note.title}
           />
           <View style={styles.mapDetails}>
@@ -50,7 +50,6 @@ export default function Home(props) {
                 item.parent === 'home' &&
                 <SelectMap
                   note={item}
-                  color={item.color}
                   setShowMap={(note) => props.setShowMap(note)}
                   key={index}
                 />

@@ -1,4 +1,4 @@
-import React,{ useRef, useState } from 'react';
+import React,{ useRef, useState, useEffect, useCallback } from 'react';
 import {
   View,
   StyleSheet,
@@ -24,7 +24,8 @@ export default function MapContainer(props) {
   const {
     navigateScreenAnim,
     mindmapTransitions,
-    interpolation
+    interpolation,
+    timingAnim
   } = animx;
 
   const spin = interpolation(angle,[0,360],['0deg','360deg']);
@@ -32,13 +33,37 @@ export default function MapContainer(props) {
 
   const scaleContainer = interpolation(props.mapTransitionAnim_1,[0,2],[0,2]);
   const fadeContainer = interpolation(props.mapTransitionAnim_1,[0,1,2],[0,1,0]);
-  const swayContainer = interpolation(props.mapTransitionAnim_1,[0,2],[0,0]);
-  const mainNoteballTranslateX = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,0,-0.5*screenWidth]);
-  const mainNoteballTranslateY = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,0,-0.5*screenHeight]);
+  const mainNoteballTranslateX = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,0,!props.isShifted ? -0.5*screenWidth : -0.8*screenWidth]);
+  const mainNoteballTranslateY = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,0,!props.isShifted ? -0.5*screenHeight : -0.95*screenHeight]);
   const mainNoteballScale = interpolation(props.mapTransitionAnim_3,[0,1,2],[0.5,1,2.8]);
   const mainNoteballOpacity = interpolation(props.mapTransitionAnim_3,[0,1,2],[0,1,1]);
   const subNoteballScale = interpolation(props.mapTransitionAnim_4,[0,1,2],[0.5,1,1.25]);
-  const subNoteballOpacity = interpolation(props.mapTransitionAnim_5,[0,1,2],[0,1,1]);
+  const subNoteballOpacity = interpolation(props.mapTransitionAnim_5,[0,1,2],[0,1,0]);
+
+  const translateMapX = interpolation(props.shiftMap,[0,1],[0,0.3*screenWidth]);
+  const translateMapY = interpolation(props.shiftMap,[0,1],[0,0.45*screenHeight]);
+  const scaleContainer_2 = interpolation(props.shiftMap,[0,1],[1,2]);
+  const shiftSubNoteballs = interpolation(props.shiftMap,[0,1],[0,0.3*screenWidth]);
+
+  const [startArr,setStartArr] = useState(props.note.subdata.length-5);
+  const [endArr,setEndArr] = useState(props.note.subdata.length-1);
+
+  const measuredRef = useCallback(node => {
+    // angle.removeAllListeners();
+    //  if (node !== null) {
+    //    angle.addListener(({value}) => {
+    //      node.measure((fx,fy,height,width,px,py) => {
+    //        if (px>screenWidth) {
+    //          if(endArr === 0) setEndArr(props.note.subdata.length-1);
+    //          else setEndArr(prevValue => prevValue-1);
+    //          if(startArr === 0) setStartArr(props.note.subdata.length-1);
+    //          else setStartArr(prevValue => prevValue-1);
+    //          console.log(startArr,endArr);
+    //        }
+    //      })
+    //    })
+    //  }
+   }, []);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -95,16 +120,29 @@ export default function MapContainer(props) {
     })
   ).current;
 
+  useEffect(() => {
+    if (props.note.subdata.length>5) {
+      timingAnim(props.shiftMap,1,250).start();
+      props.setIsShifted(true);
+    }
+    else {
+      timingAnim(props.shiftMap,0,250).start();
+      props.setIsShifted(false);
+    }
+  },[props.note.subdata.length]);
+
   return (
     <Animated.View
       style={[
         styles.mapContainer,
         {
+          width: !props.isShifted ? 0.9*screenWidth : 1.8*screenWidth,
+          height: !props.isShifted ? 0.9*screenWidth : 1.8*screenWidth,
           transform:[
-            { translateX: 0.5*screenWidth-0.45*screenWidth },
-            { translateY: 0.5*screenHeight-0.45*screenWidth },
-            { translateX: swayContainer },
-            { translateY: swayContainer }
+            { translateX: 0.5*screenWidth-(!props.isShifted ? 0.45*screenWidth : 0.9*screenWidth) },
+            { translateY: 0.5*screenHeight-(!props.isShifted ? 0.45*screenWidth : 0.9*screenWidth) },
+            { translateX: translateMapX },
+            { translateY: translateMapY }
           ]
         }
       ]}
@@ -117,7 +155,8 @@ export default function MapContainer(props) {
             transform:[
               { translateX: -0.3*screenWidth },
               { translateY: -0.3*screenWidth },
-              { scale: scaleContainer }
+              { scale: scaleContainer },
+              { scale: scaleContainer_2 }
             ]
           }
         ]}
@@ -163,8 +202,8 @@ export default function MapContainer(props) {
         styles.centered,
         {
           transform:[
-            { translateX: -12.5*screenWidth/100 },
-            { translateY: -12.5*screenWidth/100 },
+            { translateX: -10*screenWidth/100 },
+            { translateY: -10*screenWidth/100 },
             { translateX: mainNoteballTranslateX },
             { translateY: mainNoteballTranslateY },
             { scale: mainNoteballScale }
@@ -175,7 +214,13 @@ export default function MapContainer(props) {
         <Noteball
           onPress={() => funx.editNote()}
           text={props.note.title}
-          size={25}
+          color={props.note.color}
+          size={20}
+          style={{
+            transform:[
+              { scale: 1.25 }
+            ]
+          }}
         />
       </Animated.View>
         {
@@ -186,6 +231,7 @@ export default function MapContainer(props) {
                 style={styles.fillParent}
               >
                 <Animated.View
+                  ref={index === endArr ? measuredRef : null}
                   style={[
                     styles.centered,
                     {
@@ -194,7 +240,8 @@ export default function MapContainer(props) {
                         { translateY: -0.1*screenWidth },
                         { rotate: index*commonAngle+'deg'},
                         { rotate: spin },
-                        { translateX: 0.3*screenWidth},
+                        { translateX: 0.3*screenWidth },
+                        { translateX: shiftSubNoteballs },
                         { rotate: '-'+index*commonAngle+'deg'},
                         { translateX: interpolation(
                             props.mapTransitionAnim_4,
@@ -209,7 +256,7 @@ export default function MapContainer(props) {
                               0,
                               funx.translateDist(
                                 index*commonAngle,
-                                screenWidth,
+                                !props.isShifted ? screenWidth : 2*screenWidth,
                                 currentBall === index,
                                 "x"
                               )
@@ -228,16 +275,16 @@ export default function MapContainer(props) {
                               0,
                               funx.translateDist(
                                 index*commonAngle,
-                                screenWidth,
+                                !props.isShifted ? screenWidth : 2*screenWidth,
                                 currentBall === index,
                                 "y"
                               )
                             ])
                           },
                           { scale: currentBall === index ? subNoteballScale : 1 }
-                        ]
-                      },
-                      { opacity: subNoteballOpacity }
+                        ],
+                        opacity: subNoteballOpacity
+                      }
                     ]
                   }
                 >
@@ -251,10 +298,15 @@ export default function MapContainer(props) {
                             mapTransitionAnim_2:props.mapTransitionAnim_2,
                             mapTransitionAnim_3:props.mapTransitionAnim_3,
                             mapTransitionAnim_4:props.mapTransitionAnim_4,
+                            mapTransitionAnim_5:props.mapTransitionAnim_5,
+                            shiftMap:props.shiftMap,
                             transVal:2,
                             intermediateVal_1:0,
                             intermediateVal_2:1,
-                            finalVal:1
+                            finalVal:1,
+                            id:item,
+                            note:props.operatingValue,
+                            setIsShifted:props.setIsShifted
                           },
                           () => {
                             funx.mapTraverse(item,props.setShowMap,props.operatingValue)
@@ -262,8 +314,10 @@ export default function MapContainer(props) {
                         }
                       }
                     text={props.operatingValue[item].title}
+                    color={props.operatingValue[item].color}
                     size={20}
                     index={index}
+                    angle={reverseSpin}
                   />
                 </Animated.View>
                 <Animated.View
@@ -276,6 +330,7 @@ export default function MapContainer(props) {
                         { rotate: index*commonAngle+offsetAngle+'deg' },
                         { rotate: spin },
                         { translateX: 0.3*screenWidth },
+                        { translateX: shiftSubNoteballs },
                         { rotate: -1*(index*commonAngle+offsetAngle)+'deg' },
                         { rotate: reverseSpin }
                       ],
@@ -305,9 +360,6 @@ const styles = StyleSheet.create({
     left:0,
     justifyContent:'center',
     alignItems:'center',
-    width: 0.9*screenWidth,
-    height: 0.9*screenWidth,
-    borderRadius: 0.45*screenWidth
   },
   circularBorder: {
     position:'absolute',

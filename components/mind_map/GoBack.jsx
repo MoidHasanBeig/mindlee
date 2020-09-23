@@ -13,12 +13,26 @@ const screenWidth = Dimensions.get('window').width;
 export default function GoBack(props) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => props.traverse()}
-        style={styles.goBack}
-      >
-      </TouchableOpacity>
+      {
+        props.id!=='home'
+        ? <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => props.traverse()}
+          style={[
+            styles.goBack,
+            { backgroundColor: props.color || '#5CAB7D'}
+          ]}
+        >
+          <Ftext size={35}>{props.title}</Ftext>
+        </TouchableOpacity>
+        : <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => props.traverse()}
+            style={styles.goHome}
+          >
+          <Ftext color='#000' size={35}>🏠</Ftext>
+        </TouchableOpacity>
+      }
     </View>
   );
 }
@@ -34,8 +48,16 @@ const styles = StyleSheet.create({
     borderRadius:0.35*screenWidth,
   },
   goBack: {
-    backgroundColor:'#5CAB7D',
     width:'100%',
-    height:'100%'
+    height:'100%',
+    justifyContent:'flex-end',
+    alignItems:'flex-end'
+  },
+  goHome: {
+    width:'100%',
+    height:'100%',
+    position:'absolute',
+    top:'60%',
+    left:'55%'
   }
 });

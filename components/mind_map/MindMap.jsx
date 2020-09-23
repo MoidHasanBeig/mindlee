@@ -1,4 +1,4 @@
-import React,{ useRef, useEffect } from 'react';
+import React,{ useRef, useEffect, useState } from 'react';
 import {
   Animated,
   BackHandler,
@@ -26,14 +26,17 @@ export default function MindMap(props) {
   const mapTransitionAnim_3 = useRef(new Animated.Value(1)).current;
   const mapTransitionAnim_4 = useRef(new Animated.Value(1)).current;
   const mapTransitionAnim_5 = useRef(new Animated.Value(1)).current;
+  const shiftMap = useRef(new Animated.Value(0)).current;
   const {
     navigateScreenAnim,
     mindmapTransitions,
     interpolation
   } = animx;
 
-  const xdist = 0.50*screenWidth;
-  const ydist = 0.50*screenHeight;
+  const [isShifted,setIsShifted] = useState(false);
+
+  const xdist = !isShifted ? 0.5*screenWidth : 0.8*screenWidth;
+  const ydist = !isShifted ? 0.5*screenHeight : 0.95*screenHeight;
 
   const goBackTranslateX = interpolation(mapTransitionAnim_2,[0,1,2],[xdist,0,-xdist*0.7]);
   const goBackTranslateY = interpolation(mapTransitionAnim_2,[0,1,2],[ydist,0,-ydist*0.7]);
@@ -52,7 +55,11 @@ export default function MindMap(props) {
           transVal:0,
           intermediateVal_1:2,
           intermediateVal_2:2,
-          finalVal:1
+          finalVal:1,
+          shiftMap,
+          id:props.note.parent,
+          note:props.operatingValue,
+          setIsShifted
         },
         () => {
           funx.mapTraverse(props.note.parent,props.setShowMap,props.operatingValue);
@@ -96,8 +103,10 @@ export default function MindMap(props) {
           width:0.7*screenWidth
         }}>
           <GoBack
-          traverse={() => backAction()}
-          id={props.note.parent}
+            traverse={() => backAction()}
+            id={props.note.parent}
+            title={props.note.parent!=='home' && props.operatingValue[props.note.parent].title}
+            color={props.note.parent!=='home' && props.operatingValue[props.note.parent].color}
           />
         </Animated.View>
         <MapContainer
@@ -110,6 +119,9 @@ export default function MindMap(props) {
           mapTransitionAnim_3={mapTransitionAnim_3}
           mapTransitionAnim_4={mapTransitionAnim_4}
           mapTransitionAnim_5={mapTransitionAnim_5}
+          shiftMap={shiftMap}
+          isShifted={isShifted}
+          setIsShifted={setIsShifted}
         />
       </ImageBackground>
     </Animated.View>

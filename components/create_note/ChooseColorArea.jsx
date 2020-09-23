@@ -28,12 +28,11 @@ export default function ChooseColorArea(props) {
                   key={funx.uniqueId(index)}
                   style={{padding:0.04 * screenWidth}}
                 >
-                  <TouchableHighlight
-                    style={{borderRadius:50}}
+                  <Noteball
+                    color={color}
+                    size={9}
                     onPress={() => props.setCurrentColor(color)}
-                  >
-                    <Noteball color={color} size={9}/>
-                  </TouchableHighlight>
+                  />
                 </View>
               );
             })

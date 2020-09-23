@@ -6,10 +6,13 @@ export default function Ftext(props) {
   return (
     <Text style={
       {
-        fontSize:props.size*width*0.002 || 20*width*0.002,
+        fontSize:props.size*width*0.002 || 25*width*0.002,
         color:props.color || '#FFF',
         fontFamily:'monospace',
-        textAlign:props.align || 'left'
+        textAlign:props.align || 'left',
+        textAlignVertical:'center',
+        height:props.height || 'auto',
+        width:props.height || 'auto'
       }
     }>
     {props.children}
